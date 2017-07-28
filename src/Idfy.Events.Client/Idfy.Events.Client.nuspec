@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Idfy.Events</id>
+    <version>$version$</version>
+	<authors>Idfy Norge AS</authors>
+	<title>Idfy events</title>
+    <description>Idfy Event client. Listen to all the document events from Idfy.</description>
+  </metadata>
+  <files>
+	<file src="bin\Release\Idfy.Events.Entities.dll" target="lib\net45"></file>
+	<file src="bin\Release\Idfy.Events.Client.dll" target="lib\net45"></file>
+  </files>
+</package>
