@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Idfy.Events.Client.Oauth;
 using Idfy.Events.Entities;
 using Idfy.Events.Entities.Form;
 using Idfy.Events.Entities.Sign;
 using Rebus.Activation;
-using Rebus.AzureServiceBus.Config;
 using Rebus.Bus;
 using Rebus.Compression;
 using Rebus.Config;
@@ -21,15 +23,13 @@ namespace Idfy.Events.Client
     /// </summary>
     public class EventClient:IDisposable
     {
-        private const string testApiUrl = "https://testapi.signere.no";
-        private const string productionApiUrl= "https://api.signere.no";
+        public IOauthClient OauthClient;
+        public string SignatureApiUrl;
+        public string EventsApiUrl;
 
-
-        private readonly string _apikey;
         private readonly string _connectionstring;
-        private readonly Guid _documentProviderId;
+        private readonly Guid _accountId;
         private readonly string _queuename;
-        private readonly bool _secondaryKey;
         private readonly BuiltinHandlerActivator adapter;
         public IBus Bus;
         private Func<DocumentCanceledEvent, Task> DocumentCanceledEventFunc;
@@ -37,25 +37,31 @@ namespace Idfy.Events.Client
         private Func<DocumentSignedEvent, Task> DocumentSignedEventFunc;
         private Action<RebusLoggingConfigurer> rebusLoggingConfigurer;
 
-        internal EventClient(BuiltinHandlerActivator adapter, string connectionstring, Guid documentProviderId,
-            string apikey, bool secondaryKey)
+        internal EventClient(BuiltinHandlerActivator adapter, string connectionstring, Guid accountId, string oauthClientId, string oauthClientSecret, bool testEnvironment)
         {
             this.adapter = adapter;
             _connectionstring = connectionstring;
-            _documentProviderId = documentProviderId;
-            _queuename = _documentProviderId.ToString("n");
-            _apikey = apikey;
-            _secondaryKey = secondaryKey;
-           NoRebusLogger = true;
-        }
+            _accountId = accountId;
+            _queuename = _accountId.ToString("n");
+            NoRebusLogger = true;
+            var tokenEndpoint = testEnvironment ? OauthTokenEndpoint.SignereTest : OauthTokenEndpoint.SignereProd;
+            SignatureApiUrl = testEnvironment ? Urls.SignatureApiTest : Urls.SignatureApiProd;
 
-        internal bool TestEnvironment { get; set; }
+            if (SignatureApiUrl.Last().Equals('/'))
+                SignatureApiUrl = SignatureApiUrl.Remove(SignatureApiUrl.Length - 1);
+
+            EventsApiUrl = testEnvironment ? Urls.EventsApiTest : Urls.EventsApiProd;
+            if (EventsApiUrl.Last().Equals('/'))
+                EventsApiUrl = EventsApiUrl.Remove(EventsApiUrl.Length - 1);
+
+            OauthClient = new OauthClient(oauthClientId, oauthClientSecret, tokenEndpoint);
+        }
         internal string APIURL { get; set; }
 
         internal bool LogToConsole { get; set; }
         internal Rebus.Logging.LogLevel? logLevel { get; set; }
 
-    
+        
         internal void SubscribeToDocumentSignedEvent(Func<DocumentSignedEvent, Task> func)
         {
             adapter.Handle(func);
@@ -81,37 +87,42 @@ namespace Idfy.Events.Client
             adapter.Handle(func);
         }
 
-        /// <summary>
-        ///     Sets up the EventClient to download events from the ServiceBus and files from the Signere API. Note that the primary key gives elevated privileges and is not necessary for subscribing to events - using secondary key is normally sufficient (see SetupWithSecondaryKey).
-        /// </summary>
-        /// <param name="azureServiceBusConnectionString">Your ServiceBus connection string. Contact support@signere.no to get this</param>
-        /// <param name="DocumentProvider">Your account ID</param>
-        /// <param name="ApiKey">Your primary API key</param>
-        /// <returns>EventClient set up using the primary API key</returns>
-        public static EventClient SetupWithPrimaryApiKey(string azureServiceBusConnectionString, Guid DocumentProvider,string ApiKey)
+        internal void SubscribeToDocumentCreatedEvent(Func<DocumentCreatedEvent, Task> func)
         {
-            var adapter = new BuiltinHandlerActivator();
+            adapter.Handle(func);
+        }
 
-            return new EventClient(adapter, azureServiceBusConnectionString, DocumentProvider, ApiKey, false);
+        internal void SubscribeToDocumentExpiredEvent(Func<DocumentExpiredEvent, Task> func)
+        {
+            adapter.Handle(func);
+        }
+
+        internal void SubscribeToDocumentBeforeDeletedEvent(Func<DocumentBeforeDeletedEvent, Task> func)
+        {
+            adapter.Handle(func);
+        }
+
+        internal void SubscribeToDocumentDeletedEvent(Func<DocumentDeletedEvent, Task> func)
+        {
+            adapter.Handle(func);
         }
 
         /// <summary>
-        ///     Sets up the EventClient to download events from the ServiceBus and files from the Signere API.
+        ///     Sets up the EventClient to download events from the ServiceBus and files from the signature API.
         /// </summary>
         /// <param name="azureServiceBusConnectionString">Your ServiceBus connection string. Contact support@signere.no to get this</param>
-        /// <param name="DocumentProvider">Your account ID</param>
-        /// <param name="ApiKey">Your secondary API key</param>
+        /// <param name="accountId">Your account ID</param>
+        /// <param name="oauthClientId">Your oauth client Id</param>
+        /// <param name="oauthClientSecret">Your oauth client secret</param>
+        /// <param name="testEnvironment">Set to true if production environment</param>
         /// <returns>EventClient set up using the secondary API key</returns>
-        public static EventClient SetupWithSecondaryApiKey(string azureServiceBusConnectionString, Guid DocumentProvider,
-            string ApiKey)
+        public static EventClient SetupClient(string azureServiceBusConnectionString, Guid accountId, string oauthClientId, string oauthClientSecret, bool testEnvironment)
         {
             var adapter = new BuiltinHandlerActivator();
             
-            return new EventClient(adapter, azureServiceBusConnectionString, DocumentProvider, ApiKey, true);
+            return new EventClient(adapter, azureServiceBusConnectionString, accountId, oauthClientId, oauthClientSecret, testEnvironment);
         }
-
         
-
         internal void Start()
         {
             Bus = ConfigureRebus().Start();
@@ -140,7 +151,6 @@ namespace Idfy.Events.Client
                 .DoNotCreateQueues())           
                 .Options(c =>
                 {
-                    //c.SimpleRetryStrategy(_queuename + "_error", 5, true);
                     c.EnableCompression();
                     c.EnableEncryption(encryptionKey);
                 })
@@ -169,27 +179,19 @@ namespace Idfy.Events.Client
         internal RebusLoggingConfigurer Configurer { get; set; }
 
         #region Download files
-        private async Task<byte[]> DownloadSDO(Guid documentId)
+        private async Task<byte[]> DownloadDocument(Guid documentId, FileFormat fileFormat)
         {
-            var url = CreateUrl("api/DocumentFile/Signed/{0}", documentId, TestEnvironment);
+            var url = $"{SignatureApiUrl}/api/external/documentfile/{_accountId}?fileFormat={fileFormat.ToString()}";
             
-            return await DownloadFile(url);
-        }
-
-        private async Task<byte[]> DownloadPades(Guid documentId)
-        {
-            var url = CreateUrl("api/DocumentFile/SignedPDF/{0}", documentId, TestEnvironment);
-            return await DownloadFile(url);
+            return await DownloadFile(url, OauthClient.GetAccessToken("root"));
         }
 
 
         private string DownloadEncryptionKey()
         {
-            var apiUrl = ApiUrl(TestEnvironment);
-            
-            var url =string.Format("{0}/{1}",apiUrl, "api/events/encryptionkey");
+            var url = $"{EventsApiUrl}/api/events/{_accountId}";
 
-            var resultBytes=Task.Run(async()=>await  DownloadFile(url)).Result;
+            var resultBytes= Extensions.RunSync(() => DownloadFile(url, OauthClient.GetAccessToken("root")));
             var result = Encoding.UTF8.GetString(resultBytes);
             
             //Hack to unescape string
@@ -197,75 +199,26 @@ namespace Idfy.Events.Client
             return result;
         }
 
-        private async Task<byte[]> DownloadFile(string url)
+        private async Task<byte[]> DownloadFile(string url, string token)
         {
             using (var client = new HttpClient())
             {
                 try
                 {
-                    var timestamp = DateTime.UtcNow.ToString("s");
-                    client.DefaultRequestHeaders.Add("API-ID", _documentProviderId.ToString());
-                    client.DefaultRequestHeaders.Add("API-TIMESTAMP", timestamp);
-                    client.DefaultRequestHeaders.Add("API-USINGSECONDARYTOKEN", _secondaryKey.ToString());
-                    client.DefaultRequestHeaders.Add("API-TOKEN", GenerateTokenForUrl(url, "GET", _apikey, timestamp));
-                    client.DefaultRequestHeaders.Add("API-ALGORITHM", "SHA512");
-                    client.DefaultRequestHeaders.Add("API-RETURNERRORHEADER", "true");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     return await client.GetByteArrayAsync(url);
                 }
                 catch (Exception e)
                 {
-                    if(LogToConsole)
+                    if (LogToConsole)
                         Console.WriteLine(e);
 
                     throw e;
                 }
             }
+            return null;
         }
-
-        private static string GenerateTokenForUrl(string url, string httpverb, string secretKey, string timestamp)
-        {
-            var urlWithTimeStamp = string.Format("{0}&Timestamp={1}&Httpverb={2}", url, timestamp, httpverb);
-            return GetSHA512(urlWithTimeStamp, secretKey);
-        }
-
-        private static string GetSHA512(string text, string key)
-        {
-            Encoding encoding = new UTF8Encoding();
-
-            var keyByte = encoding.GetBytes(key);
-            var hmacsha512 = new HMACSHA512(keyByte);
-
-            var messageBytes = encoding.GetBytes(text);
-            var hashmessage = hmacsha512.ComputeHash(messageBytes);
-            return ByteToString(hashmessage);
-        }
-
-        private static string ByteToString(byte[] buff)
-        {
-            var sbinary = "";
-
-            for (var i = 0; i < buff.Length; i++)
-            {
-                sbinary += buff[i].ToString("X2"); // hex format
-            }
-            return (sbinary);
-        }
-
        
-        private string CreateUrl(string path, Guid documentId, bool testEnvironment)
-        {
-            var apiUrl = ApiUrl(testEnvironment);
-            return string.Format("{0}/{1}", apiUrl, string.Format(path, documentId));
-        }
-
-        private string ApiUrl(bool testEnvironment)
-        {
-            var apiUrl = testEnvironment ? testApiUrl : productionApiUrl;
-            if (!string.IsNullOrWhiteSpace(APIURL))
-                apiUrl = APIURL;
-            return apiUrl;
-        }
-
         #endregion
 
         /// <summary>
@@ -279,11 +232,5 @@ namespace Idfy.Events.Client
         }
     }
 
-    public enum LogLevel
-    {
-        Debug,
-        Info,
-        Warn,
-        Error,
-    }
+
 }

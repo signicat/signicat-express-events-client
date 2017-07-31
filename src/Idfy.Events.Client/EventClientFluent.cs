@@ -25,18 +25,6 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Use this if you are connected to the Signere.no test environment and not the production environment. If in doubt, contact support at support@signere.no
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="testEnvironment"></param>
-        /// <returns></returns>
-        public static EventClient UseTestEnvironment(this EventClient eventClient, bool testEnvironment=true)
-        {
-            eventClient.TestEnvironment = testEnvironment;
-            return eventClient;
-        }
-
-        /// <summary>
         /// Plugin - a logger which is compatible with Rebus. Read more here: https://github.com/rebus-org/Rebus/wiki/Logging
         /// </summary>
         /// <param name="eventClient"></param>
@@ -137,6 +125,58 @@ namespace Idfy.Events.Client
             return eventClient;
         }
 
+        /// <summary>
+        /// Subscribe to the Documentcreated event. This is fired when a new document is created.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToDocumentCreatedEvent(this EventClient eventClient,
+            Func<DocumentCreatedEvent, Task> @event)
+        {
+            if (@event != null)
+                eventClient.SubscribeToDocumentCreatedEvent(@event);
+            return eventClient;
+        }
+
+        /// <summary>
+        /// Subscribe to the Documentexpired event. This is fired when a document has expired.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToDocumentExpiredEvent(this EventClient eventClient, Func<DocumentExpiredEvent, Task> @event)
+        {
+            if (@event != null)
+                eventClient.SubscribeToDocumentExpiredEvent(@event);
+            return eventClient;
+        }
+
+        /// <summary>
+        /// Subscribe to the DocumentBeforeDeleted event. This is fired when a document is about to be deleted.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToDocumentBeforeDeletedEvent(this EventClient eventClient, Func<DocumentBeforeDeletedEvent, Task> @event)
+        {
+            if (@event != null)
+                eventClient.SubscribeToDocumentBeforeDeletedEvent(@event);
+            return eventClient;
+        }
+
+        /// <summary>
+        /// Subscribe to the DocumentBeforeDeleted event. This is fired when a document has been deleted.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToDocumentBeforeDeletedEvent(this EventClient eventClient, Func<DocumentDeletedEvent, Task> @event)
+        {
+            if (@event != null)
+                eventClient.SubscribeToDocumentDeletedEvent(@event);
+            return eventClient;
+        }
 
         /// <summary>
         /// Start the event listener. It is important to call this function; or else the EventClient will not start listening
