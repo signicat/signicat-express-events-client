@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Idfy.Events.Entities.Sign;
 
-namespace Idfy.Events.Entities.Sign
+namespace Idfy.Events.Entities.Events
 {
-    public class DocumentSignedEvent : BaseDocumentEvent
+    public class DocumentSignedPayload : BaseDocumentPayload
     {
         public DateTime SignedTimeStamp { get; set; }
 

@@ -21,7 +21,7 @@ namespace Idfy.Events.Client
     /// <summary>
     /// Event client for Signere.no. Remember to dispose of the client when done by calling the Dispose() method.
     /// </summary>
-    public class EventClient:IDisposable
+    public class EventClient : IDisposable
     {
         public IOauthClient OauthClient;
         public string SignatureApiUrl;
@@ -37,7 +37,8 @@ namespace Idfy.Events.Client
         private Func<DocumentSignedEvent, Task> DocumentSignedEventFunc;
         private Action<RebusLoggingConfigurer> rebusLoggingConfigurer;
 
-        internal EventClient(BuiltinHandlerActivator adapter, string connectionstring, Guid accountId, string oauthClientId, string oauthClientSecret, bool testEnvironment)
+        internal EventClient(BuiltinHandlerActivator adapter, string connectionstring, Guid accountId,
+            string oauthClientId, string oauthClientSecret, bool testEnvironment)
         {
             this.adapter = adapter;
             _connectionstring = connectionstring;
@@ -56,12 +57,13 @@ namespace Idfy.Events.Client
 
             OauthClient = new OauthClient(oauthClientId, oauthClientSecret, tokenEndpoint);
         }
+
         internal string APIURL { get; set; }
 
         internal bool LogToConsole { get; set; }
         internal Rebus.Logging.LogLevel? logLevel { get; set; }
 
-        
+
         internal void SubscribeToDocumentSignedEvent(Func<DocumentSignedEvent, Task> func)
         {
             adapter.Handle(func);
@@ -116,13 +118,15 @@ namespace Idfy.Events.Client
         /// <param name="oauthClientSecret">Your oauth client secret</param>
         /// <param name="testEnvironment">Set to true if production environment</param>
         /// <returns>EventClient set up using the secondary API key</returns>
-        public static EventClient SetupClient(string azureServiceBusConnectionString, Guid accountId, string oauthClientId, string oauthClientSecret, bool testEnvironment)
+        public static EventClient SetupClient(string azureServiceBusConnectionString, Guid accountId,
+            string oauthClientId, string oauthClientSecret, bool testEnvironment)
         {
             var adapter = new BuiltinHandlerActivator();
-            
-            return new EventClient(adapter, azureServiceBusConnectionString, accountId, oauthClientId, oauthClientSecret, testEnvironment);
+
+            return new EventClient(adapter, azureServiceBusConnectionString, accountId, oauthClientId,
+                oauthClientSecret, testEnvironment);
         }
-        
+
         internal void Start()
         {
             Bus = ConfigureRebus().Start();
@@ -148,7 +152,7 @@ namespace Idfy.Events.Client
             string encryptionKey = DownloadEncryptionKey();
             return Configure.With(adapter)
                 .Transport(x => x.UseAzureServiceBus(_connectionstring, _queuename, AzureServiceBusMode.Basic)
-                .DoNotCreateQueues())           
+                    .DoNotCreateQueues())
                 .Options(c =>
                 {
                     c.EnableCompression();
@@ -156,22 +160,21 @@ namespace Idfy.Events.Client
                 })
                 .Logging(x =>
                 {
-                    if(LogToConsole)
-                        x.ColoredConsole(this.logLevel==null ? Rebus.Logging.LogLevel.Error : this.logLevel.Value);
-                    else if (RebusLoggerFactory!=null)
+                    if (LogToConsole)
+                        x.ColoredConsole(this.logLevel == null ? Rebus.Logging.LogLevel.Error : this.logLevel.Value);
+                    else if (RebusLoggerFactory != null)
                     {
                         x.Use(RebusLoggerFactory);
-                    }else if (rebusLoggingConfigurer != null)
+                    }
+                    else if (rebusLoggingConfigurer != null)
                     {
                         rebusLoggingConfigurer(x);
                     }
-                    else if(NoRebusLogger)
+                    else if (NoRebusLogger)
                     {
                         x.None();
                     }
                 });
-
-            
         }
 
         internal IRebusLoggerFactory RebusLoggerFactory { get; set; }
@@ -179,10 +182,11 @@ namespace Idfy.Events.Client
         internal RebusLoggingConfigurer Configurer { get; set; }
 
         #region Download files
+
         private async Task<byte[]> DownloadDocument(Guid documentId, FileFormat fileFormat)
         {
             var url = $"{SignatureApiUrl}/api/external/documentfile/{_accountId}?fileFormat={fileFormat.ToString()}";
-            
+
             return await DownloadFile(url, OauthClient.GetAccessToken("root"));
         }
 
@@ -191,11 +195,11 @@ namespace Idfy.Events.Client
         {
             var url = $"{EventsApiUrl}/api/events/{_accountId}";
 
-            var resultBytes= Extensions.RunSync(() => DownloadFile(url, OauthClient.GetAccessToken("root")));
+            var resultBytes = Extensions.RunSync(() => DownloadFile(url, OauthClient.GetAccessToken("root")));
             var result = Encoding.UTF8.GetString(resultBytes);
-            
+
             //Hack to unescape string
-            result= result.Substring(1,result.Length-2);
+            result = result.Substring(1, result.Length - 2);
             return result;
         }
 
@@ -218,7 +222,7 @@ namespace Idfy.Events.Client
             }
             return null;
         }
-       
+
         #endregion
 
         /// <summary>
@@ -226,11 +230,7 @@ namespace Idfy.Events.Client
         /// </summary>
         public void Dispose()
         {
-            
-            if(Bus!=null)
-                Bus.Dispose();
+            Bus?.Dispose();
         }
     }
-
-
 }
