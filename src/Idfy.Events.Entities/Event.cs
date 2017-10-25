@@ -2,14 +2,14 @@
 
 namespace Idfy.Events.Entities
 {
-    public interface IEvent
+    public abstract class Event
     {
-        Guid Id { get; }
-        EventType Type { get; set; }
-        object Payload { get; set; }
+        public Guid Id { get; protected set; }
+        public EventType Type { get; set; }
+        public abstract object RawPayload { get; }
     }
-    
-    public abstract class Event<T> : IEvent where T : class
+
+    public abstract class Event<T> : Event where T : class
     {
         protected Event(EventType type, T payload)
         {
@@ -18,8 +18,7 @@ namespace Idfy.Events.Entities
             Payload = payload;
         }
 
-        public Guid Id { get; }
-        public EventType Type { get; set; }
-        public object Payload { get; set; }
+        public T Payload { get; set; }
+        public override object RawPayload => Payload;
     }
 }

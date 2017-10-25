@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Idfy.Events.Entities;
-using Idfy.Events.Entities.Form;
-using Idfy.Events.Entities.Sign;
+using Idfy.Events.Entities.Events;
+using Idfy.Events.Entities.Payloads;
 using Rebus.Config;
 using Rebus.Logging;
 
@@ -17,7 +16,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentSignedEvent(this EventClient eventClient,
-            Func<DocumentSignedEvent, Task> @event)
+            Func<DocumentSignedPayload, Task> @event)
         {
             if(@event!=null)
                 eventClient.SubscribeToDocumentSignedEvent(@event);
@@ -75,7 +74,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentCanceledEvent(this EventClient eventClient,
-           Func<DocumentCanceledEvent, Task> @event)
+           Func<DocumentCanceledPayload, Task> @event)
         {
             if(@event!=null)
                 eventClient.SubscribeToDocumentCanceledEvent(@event);
@@ -89,7 +88,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentPartiallySignedEvent(this EventClient eventClient,
-           Func<DocumentPartiallySignedEvent, Task> @event)
+           Func<DocumentPartiallySignedPayload, Task> @event)
         {
             if(@event!=null)
             eventClient.SubscribeToDocumentPartiallySignedEvent(@event);
@@ -132,7 +131,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentCreatedEvent(this EventClient eventClient,
-            Func<DocumentCreatedEvent, Task> @event)
+            Func<DocumentCreatedPayload, Task> @event)
         {
             if (@event != null)
                 eventClient.SubscribeToDocumentCreatedEvent(@event);

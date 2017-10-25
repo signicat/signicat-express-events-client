@@ -7,6 +7,8 @@
         DocumentCreated,
         DocumentDeleted,
         DocumentExpired,
+        DocumentFormPartiallySigned,
+        DocumentFormSigned,
         DocumentPackaged,
         DocumentPartiallySigned,
         DocumentRead,

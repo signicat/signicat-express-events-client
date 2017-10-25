@@ -2,13 +2,10 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Idfy.Events.Client.Oauth;
-using Idfy.Events.Entities;
-using Idfy.Events.Entities.Form;
-using Idfy.Events.Entities.Sign;
+using Idfy.Events.Entities.Events;
 using Rebus.Activation;
 using Rebus.Bus;
 using Rebus.Compression;

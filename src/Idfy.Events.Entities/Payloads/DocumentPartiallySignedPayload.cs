@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Idfy.Events.Entities.Sign
+namespace Idfy.Events.Entities.Payloads
 {
-    public class DocumentPartiallySignedEvent : BaseDocumentEvent
+    public class DocumentPartiallySignedPayload : BaseDocumentPayload
     {
         public Guid SignerId { get; set; }
 

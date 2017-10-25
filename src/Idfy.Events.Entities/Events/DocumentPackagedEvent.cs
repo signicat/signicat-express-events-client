@@ -1,4 +1,6 @@
-﻿namespace Idfy.Events.Entities.Events
+﻿using Idfy.Events.Entities.Payloads;
+
+namespace Idfy.Events.Entities.Events
 {
     public class DocumentPackagedEvent : Event<DocumentPackagedPayload>
     {

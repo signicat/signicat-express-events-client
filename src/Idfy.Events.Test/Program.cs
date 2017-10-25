@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Idfy.Events.Client;
-using Idfy.Events.Client.Oauth;
 using Idfy.Events.Entities;
-using Idfy.Events.Entities.Sign;
+using Idfy.Events.Entities.Events;
+using Idfy.Events.Entities.Payloads;
 using Newtonsoft.Json;
 using Rebus.Config;
-using Rebus.Serilog;
 using Serilog;
 
 namespace Idfy.Events.Test
@@ -33,27 +34,27 @@ namespace Idfy.Events.Test
             client.Dispose();
         }
 
-        private static Task DocumentCreatedEvent(DocumentCreatedEvent arg)
+        private static Task DocumentCreatedEvent(DocumentCreatedPayload payload)
         {
-            System.IO.File.WriteAllText($"{arg.DocumentId}_created.json", Newtonsoft.Json.JsonConvert.SerializeObject(arg, Formatting.Indented));
+            System.IO.File.WriteAllText($"{payload.DocumentId}_created.json", Newtonsoft.Json.JsonConvert.SerializeObject(payload, Formatting.Indented));
             return Task.FromResult(0);
         }
 
-        private static Task DocumentPartiallySignedEvent(DocumentPartiallySignedEvent arg)
+        private static Task DocumentPartiallySignedEvent(DocumentPartiallySignedPayload payload)
         {
-            System.IO.File.WriteAllText($"{arg.DocumentId}_partial.json", Newtonsoft.Json.JsonConvert.SerializeObject(arg, Formatting.Indented));
+            System.IO.File.WriteAllText($"{payload.DocumentId}_partial.json", Newtonsoft.Json.JsonConvert.SerializeObject(payload, Formatting.Indented));
             return Task.FromResult(0);
         }
 
-        private static  Task DocumentCanceledEvent(DocumentCanceledEvent arg)
+        private static  Task DocumentCanceledEvent(DocumentCanceledPayload payload)
         {
-            System.IO.File.WriteAllText($"{arg.DocumentId}_canceled.json", Newtonsoft.Json.JsonConvert.SerializeObject(arg, Formatting.Indented));
+            System.IO.File.WriteAllText($"{payload.DocumentId}_canceled.json", Newtonsoft.Json.JsonConvert.SerializeObject(payload, Formatting.Indented));
             return Task.FromResult(0);
         }
 
-        private static Task DocumentSignedEvent(DocumentSignedEvent arg)
+        private static Task DocumentSignedEvent(DocumentSignedPayload payload)
         {
-            System.IO.File.WriteAllText($"{arg.DocumentId}_signed.json", Newtonsoft.Json.JsonConvert.SerializeObject(arg, Formatting.Indented));
+            System.IO.File.WriteAllText($"{payload.DocumentId}_signed.json", Newtonsoft.Json.JsonConvert.SerializeObject(payload, Formatting.Indented));
             return Task.FromResult(0);
         }
     }
