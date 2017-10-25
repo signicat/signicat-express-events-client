@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Idfy.Events.Entities.Events;
-using Idfy.Events.Entities.Payloads;
+using Idfy.Events.Entities.Events;
 using Rebus.Config;
 using Rebus.Logging;
 
@@ -16,7 +16,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentSignedEvent(this EventClient eventClient,
-            Func<DocumentSignedPayload, Task> @event)
+            Func<DocumentSignedEvent, Task> @event)
         {
             if(@event!=null)
                 eventClient.SubscribeToDocumentSignedEvent(@event);
@@ -74,7 +74,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentCanceledEvent(this EventClient eventClient,
-           Func<DocumentCanceledPayload, Task> @event)
+           Func<DocumentCanceledEvent, Task> @event)
         {
             if(@event!=null)
                 eventClient.SubscribeToDocumentCanceledEvent(@event);
@@ -88,7 +88,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentPartiallySignedEvent(this EventClient eventClient,
-           Func<DocumentPartiallySignedPayload, Task> @event)
+           Func<DocumentPartiallySignedEvent, Task> @event)
         {
             if(@event!=null)
             eventClient.SubscribeToDocumentPartiallySignedEvent(@event);
@@ -131,7 +131,7 @@ namespace Idfy.Events.Client
         /// <param name="event"></param>
         /// <returns></returns>
         public static EventClient SubscribeToDocumentCreatedEvent(this EventClient eventClient,
-            Func<DocumentCreatedPayload, Task> @event)
+            Func<DocumentCreatedEvent, Task> @event)
         {
             if (@event != null)
                 eventClient.SubscribeToDocumentCreatedEvent(@event);
