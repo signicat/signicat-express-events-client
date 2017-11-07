@@ -16,7 +16,7 @@ using Rebus.Logging;
 namespace Idfy.Events.Client
 {
     /// <summary>
-    /// Event client for Signere.no. Remember to dispose of the client when done by calling the Dispose() method.
+    /// Event client for Idfy. Remember to dispose of the client when done by calling the Dispose() method.
     /// </summary>
     public class EventClient : IDisposable
     {
@@ -107,9 +107,9 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        ///     Sets up the EventClient to download events from the ServiceBus and files from the signature API.
+        /// Sets up the EventClient to download events from the ServiceBus and files from the signature API.
         /// </summary>
-        /// <param name="azureServiceBusConnectionString">Your ServiceBus connection string. Contact support@signere.no to get this</param>
+        /// <param name="azureServiceBusConnectionString">Your ServiceBus connection string. Contact support@idfy.io to get this</param>
         /// <param name="accountId">Your account ID</param>
         /// <param name="oauthClientId">Your oauth client Id</param>
         /// <param name="oauthClientSecret">Your oauth client secret</param>
@@ -214,7 +214,7 @@ namespace Idfy.Events.Client
                     if (LogToConsole)
                         Console.WriteLine(e);
 
-                    throw e;
+                    throw;
                 }
             }
             return null;
@@ -223,7 +223,7 @@ namespace Idfy.Events.Client
         #endregion
 
         /// <summary>
-        /// IMPORTANT! Disposes the EventClient, which also disposes the bus. You should always call this method when your program has completed.
+        /// Disposes the Event Client, which also disposes the bus. You should always call this method when your program has completed.
         /// </summary>
         public void Dispose()
         {

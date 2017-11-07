@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Idfy.Events.Entities;
-using Idfy.Events.Entities.Events;
 using Idfy.Events.Entities.Events;
 using Rebus.Config;
 using Rebus.Logging;
