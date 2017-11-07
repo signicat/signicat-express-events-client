@@ -1,10 +1,12 @@
-﻿using Idfy.Events.Entities.Payloads;
+﻿using System;
+using Idfy.Events.Entities.Payloads;
 
 namespace Idfy.Events.Entities.Events
 {
     public class DocumentDeletedEvent : Event<DocumentDeletedPayload>
     {
-        public DocumentDeletedEvent(DocumentDeletedPayload payload) : base(EventType.DocumentDeleted, payload)
+        public DocumentDeletedEvent(Guid accountId, DocumentDeletedPayload payload) 
+            : base(EventType.DocumentDeleted, payload, accountId)
         {
         }
     }

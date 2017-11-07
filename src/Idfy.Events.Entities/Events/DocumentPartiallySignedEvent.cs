@@ -1,10 +1,12 @@
-﻿using Idfy.Events.Entities.Payloads;
+﻿using System;
+using Idfy.Events.Entities.Payloads;
 
 namespace Idfy.Events.Entities.Events
 {
     public class DocumentPartiallySignedEvent : Event<DocumentPartiallySignedPayload>
     {
-        public DocumentPartiallySignedEvent(DocumentPartiallySignedPayload payload) : base(EventType.DocumentPartiallySigned, payload)
+        public DocumentPartiallySignedEvent(Guid accountId, DocumentPartiallySignedPayload payload) 
+            : base(EventType.DocumentPartiallySigned, payload, accountId)
         {
         }
     }
