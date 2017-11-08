@@ -7,7 +7,7 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentCanceledEvent : Event<DocumentCanceledPayload>
     {
-        public DocumentCanceledEvent(Guid accountId, DocumentCanceledPayload payload) 
+        public DocumentCanceledEvent(DocumentCanceledPayload payload, Guid accountId) 
             : base(EventType.DocumentCanceled, payload, accountId)
         {
         }

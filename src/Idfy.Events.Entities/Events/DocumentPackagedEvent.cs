@@ -5,7 +5,7 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentPackagedEvent : Event<DocumentPackagedPayload>
     {
-        public DocumentPackagedEvent(Guid accountId, DocumentPackagedPayload payload) 
+        public DocumentPackagedEvent(DocumentPackagedPayload payload, Guid accountId) 
             : base(EventType.DocumentPackaged, payload, accountId)
         {
         }

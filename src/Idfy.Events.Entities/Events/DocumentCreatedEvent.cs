@@ -5,7 +5,7 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentCreatedEvent : Event<DocumentCreatedPayload>
     {
-        public DocumentCreatedEvent(Guid accountId, DocumentCreatedPayload payload) 
+        public DocumentCreatedEvent(DocumentCreatedPayload payload, Guid accountId) 
             : base(EventType.DocumentCreated, payload, accountId)
         {
         }

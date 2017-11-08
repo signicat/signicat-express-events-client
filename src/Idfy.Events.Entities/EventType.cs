@@ -9,9 +9,11 @@
         DocumentExpired,
         DocumentFormPartiallySigned,
         DocumentFormSigned,
+        DocumentLinkOpened,
         DocumentPackaged,
         DocumentPartiallySigned,
         DocumentRead,
-        DocumentSigned
+        DocumentSigned,
+        EmailOpened
     }
 }

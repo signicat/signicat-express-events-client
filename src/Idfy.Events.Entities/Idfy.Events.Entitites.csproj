@@ -42,9 +42,12 @@
     <Compile Include="Events\DocumentExpiredEvent.cs" />
     <Compile Include="Events\DocumentFormPartiallySignedEvent.cs" />
     <Compile Include="Events\DocumentFormSignedEvent.cs" />
+    <Compile Include="Events\DocumentLinkOpenedEvent.cs" />
     <Compile Include="Events\DocumentPackagedEvent.cs" />
     <Compile Include="Events\DocumentPartiallySignedEvent.cs" />
+    <Compile Include="Events\DocumentReadEvent.cs" />
     <Compile Include="Events\DocumentSignedEvent.cs" />
+    <Compile Include="Events\EmailOpenedEvent.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="Payloads\BaseDocumentPayload.cs" />
     <Compile Include="Payloads\DocumentBeforeDeletedPayload.cs" />
@@ -54,9 +57,12 @@
     <Compile Include="Payloads\DocumentExpiredPayload.cs" />
     <Compile Include="Payloads\DocumentFormPartiallySignedPayload.cs" />
     <Compile Include="Payloads\DocumentFormSignedPayload.cs" />
+    <Compile Include="Payloads\DocumentLinkOpenedPayload.cs" />
     <Compile Include="Payloads\DocumentPackagedPayload.cs" />
     <Compile Include="Payloads\DocumentPartiallySignedPayload.cs" />
+    <Compile Include="Payloads\DocumentReadPayload.cs" />
     <Compile Include="Payloads\DocumentSignedPayload.cs" />
+    <Compile Include="Payloads\EmailOpenedPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sign\Signer.cs" />
   </ItemGroup>

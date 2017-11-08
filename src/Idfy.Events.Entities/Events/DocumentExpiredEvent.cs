@@ -5,8 +5,8 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentExpiredEvent : Event<DocumentExpiredPayload>
     {
-        public DocumentExpiredEvent(Guid accountId, DocumentExpiredPayload payload) : 
-            base(EventType.DocumentExpired, payload, accountId)
+        public DocumentExpiredEvent(DocumentExpiredPayload payload, Guid accountId) 
+            : base(EventType.DocumentExpired, payload, accountId)
         {
         }
     }

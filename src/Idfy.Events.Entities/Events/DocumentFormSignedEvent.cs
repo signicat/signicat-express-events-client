@@ -5,7 +5,7 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentFormSignedEvent : Event<DocumentFormSignedPayload>
     {
-        public DocumentFormSignedEvent(Guid accountId, DocumentFormSignedPayload payload) 
+        public DocumentFormSignedEvent(DocumentFormSignedPayload payload, Guid accountId) 
             : base(EventType.DocumentFormSigned, payload, accountId)
         {
         }

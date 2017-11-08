@@ -6,7 +6,7 @@ namespace Idfy.Events.Entities.Events
 {
     public class DocumentBeforeDeletedEvent : Event<DocumentBeforeDeletedPayload>
     {
-        public DocumentBeforeDeletedEvent(Guid accountId, DocumentBeforeDeletedPayload payload) 
+        public DocumentBeforeDeletedEvent(DocumentBeforeDeletedPayload payload, Guid accountId) 
             : base(EventType.DocumentBeforeDeleted, payload, accountId)
         {
         }
