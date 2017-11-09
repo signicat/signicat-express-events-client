@@ -54,14 +54,20 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Oauth\AccessToken.cs" />
+    <Compile Include="Entities\EventClientConfiguration.cs" />
+    <Compile Include="Entities\IdfyError.cs" />
+    <Compile Include="Entities\TokenResponse.cs" />
+    <Compile Include="Enums\IdfyEnvironment.cs" />
+    <Compile Include="Infastructure\AsyncHelper.cs" />
+    <Compile Include="Infastructure\Mapper.cs" />
+    <Compile Include="Infastructure\Public\IdfyException.cs" />
+    <Compile Include="Infastructure\Public\IdfyResponse.cs" />
+    <Compile Include="Infastructure\Requestor.cs" />
+    <Compile Include="Infastructure\Extensions.cs" />
+    <Compile Include="Infastructure\Urls.cs" />
     <Compile Include="EventClient.cs" />
     <Compile Include="EventClientFluent.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Oauth\OauthClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Urls.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -72,7 +78,6 @@
       <Name>Idfy.Events.Entitites</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

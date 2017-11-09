@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Dynamic;
-using System.Security.Cryptography.X509Certificates;
-using Idfy.Events.Entities.Payloads;
 
-namespace Idfy.Events.Entities.Events
+namespace Idfy.Events.Entities
 {
     public class DocumentCanceledEvent : Event<DocumentCanceledPayload>
     {

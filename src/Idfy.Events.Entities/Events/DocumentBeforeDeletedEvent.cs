@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using Idfy.Events.Entities.Payloads;
 
-namespace Idfy.Events.Entities.Events
+namespace Idfy.Events.Entities
 {
     public class DocumentBeforeDeletedEvent : Event<DocumentBeforeDeletedPayload>
     {

@@ -1,7 +1,6 @@
 ﻿using System;
-using Idfy.Events.Entities.Payloads;
 
-namespace Idfy.Events.Entities.Events
+namespace Idfy.Events.Entities
 {
     public class DocumentLinkOpenedEvent : Event<DocumentLinkOpenedPayload>
     {

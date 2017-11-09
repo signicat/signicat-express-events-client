@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Idfy.Events.Entities.Sign
+namespace Idfy.Events.Entities
 {
     public class Signer
     {

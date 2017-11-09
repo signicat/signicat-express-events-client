@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Idfy.Events.Entities.Payloads
+namespace Idfy.Events.Entities
 {
     public class DocumentFormPartiallySignedPayload : BaseDocumentPayload
     {

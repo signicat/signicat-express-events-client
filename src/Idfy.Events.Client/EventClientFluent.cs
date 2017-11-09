@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Idfy.Events.Entities.Events;
+using Idfy.Events.Entities;
+using Idfy.Events.Entities;
 using Rebus.Config;
 using Rebus.Logging;
 
@@ -28,12 +29,14 @@ namespace Idfy.Events.Client
         /// <param name="eventClient"></param>
         /// <param name="loggerFactory"></param>
         /// <returns></returns>
-        public static EventClient UseRebusCompatibleLogger(this EventClient eventClient,object loggerFactory)
+        public static EventClient UseRebusCompatibleLogger(this EventClient eventClient, object loggerFactory)
         {
-            if (loggerFactory as IRebusLoggerFactory != null)
-                eventClient.RebusLoggerFactory =(IRebusLoggerFactory) loggerFactory;
-            if(loggerFactory!=null)
+            if (loggerFactory is IRebusLoggerFactory factory)
+                eventClient.RebusLoggerFactory = factory;
+            
+            if(loggerFactory != null)
                 eventClient.LogToConsole = false;
+            
             return eventClient;
         }
 
@@ -41,28 +44,19 @@ namespace Idfy.Events.Client
         /// Sets up a console logger in Rebus. You can only have one logger, so do not combine this with another logger
         /// </summary>
         /// <param name="eventClient"></param>
+        /// <param name="logLevel"></param>
         /// <param name="logToConsole"></param>
         /// <returns></returns>
-        public static EventClient LogToConsole(this EventClient eventClient, LogLevel logLevel = LogLevel.Debug, bool logToConsole=true)
+        public static EventClient LogToConsole(this EventClient eventClient, LogLevel logLevel = LogLevel.Debug, bool logToConsole = true)
         {
             var internalLogLevel = (Rebus.Logging.LogLevel)Enum.Parse(typeof(Rebus.Logging.LogLevel), logLevel.ToString());
 
             eventClient.LogToConsole = logToConsole;
-            eventClient.logLevel = internalLogLevel;
+            eventClient.LogLevel = internalLogLevel;
+            
             if(logToConsole)
                 eventClient.RebusLoggerFactory = null;
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Do not use - only for Idfy internal developers
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="apiUrl"></param>
-        /// <returns></returns>
-        public static EventClient UseDevEnvironment(this EventClient eventClient, string apiUrl)
-        {
-            eventClient.APIURL = apiUrl;
+            
             return eventClient;
         }
 

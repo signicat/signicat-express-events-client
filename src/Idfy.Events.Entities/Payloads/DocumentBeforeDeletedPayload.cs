@@ -1,4 +1,4 @@
-﻿namespace Idfy.Events.Entities.Payloads
+﻿namespace Idfy.Events.Entities
 {
     public class DocumentBeforeDeletedPayload : BaseDocumentPayload
     {
