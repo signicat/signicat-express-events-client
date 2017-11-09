@@ -59,6 +59,8 @@
     <Compile Include="Entities\TokenResponse.cs" />
     <Compile Include="Enums\IdfyEnvironment.cs" />
     <Compile Include="Infastructure\AsyncHelper.cs" />
+    <Compile Include="Infastructure\Bus\NamespaceFilterStep.cs" />
+    <Compile Include="Infastructure\Bus\RebusExtensions.cs" />
     <Compile Include="Infastructure\Mapper.cs" />
     <Compile Include="Infastructure\Public\IdfyException.cs" />
     <Compile Include="Infastructure\Public\IdfyResponse.cs" />

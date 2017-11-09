@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Idfy.Events.Client.Infastructure;
+using Idfy.Events.Client.Infastructure.Bus;
 using Idfy.Events.Entities;
 using Rebus.Activation;
 using Rebus.Bus;
@@ -137,6 +138,7 @@ namespace Idfy.Events.Client
                     .DoNotCreateQueues())
                 .Options(c =>
                 {
+                    c.AddNamespaceFilter();
                     c.EnableCompression();
                     c.EnableEncryption(config.EncryptionKey);
                 })
@@ -178,8 +180,8 @@ namespace Idfy.Events.Client
             // Get event configuration
             var eventEndpoint = _environment == IdfyEnvironment.Test ? Urls.EventsApiTest : Urls.EventsApiProd;
             var eventConfigUrl = $"{eventEndpoint}/client/{_accountId}";
-            
-            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString(eventConfigUrl));
+
+            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString(eventConfigUrl, tokenResponse.AccessToken));
 
             if (string.IsNullOrWhiteSpace(eventConfigResponse.ConnectionString))
             {
