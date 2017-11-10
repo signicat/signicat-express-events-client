@@ -22,7 +22,7 @@ namespace Idfy.Events.Entities
         DocumentDeleted,
         
         [EnumMember(Value = "document_expired")]
-        [Description("When document expires.")]
+        [Description("When a document expires.")]
         DocumentExpired,
         
         [EnumMember(Value = "document_email_opened")]
