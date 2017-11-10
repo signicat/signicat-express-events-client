@@ -7,12 +7,10 @@ namespace Idfy.Events.Client.Infastructure.Bus
 {
     public class NamespaceFilterStep : IIncomingStep
     {
-        private const string MessageTypeHeader = "rbs2-msg-type";
-        
         public async Task Process(IncomingStepContext context, Func<Task> next)
         {
             var message = context.Load<TransportMessage>();
-            var messageType = message.Headers.ContainsKey(MessageTypeHeader) ? message.Headers[MessageTypeHeader] : "";
+            var messageType = message.Headers.ContainsKey(Rebus.Messages.Headers.Type) ? message.Headers[Rebus.Messages.Headers.Type] : "";
             if (!messageType.StartsWith("Idfy.Events.Entities")) return;
 
             await next();
