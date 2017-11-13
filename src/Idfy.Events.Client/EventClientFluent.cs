@@ -10,20 +10,6 @@ namespace Idfy.Events.Client
     public static class EventClientFluent
     {
         /// <summary>
-        /// Subscribe to the Document Signed saved event. This is fired when all the signers have signed the document.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentSignedEvent(this EventClient eventClient,
-            Func<DocumentSignedEvent, Task> @event)
-        {
-            if(@event!=null)
-                eventClient.SubscribeToDocumentSignedEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
         /// Plugin - a logger which is compatible with Rebus. Read more here: https://github.com/rebus-org/Rebus/wiki/Logging
         /// </summary>
         /// <param name="eventClient"></param>
@@ -59,9 +45,36 @@ namespace Idfy.Events.Client
             
             return eventClient;
         }
+        
+        /// <summary>
+        /// Subscribe to all raised events.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToAllEvents(this EventClient eventClient, Func<Event, Task> @event)
+        {
+            if (@event != null)
+                eventClient.SubscribeToAllEvents(@event);
+            return eventClient;
+        }
+        
+        /// <summary>
+        /// Subscribe to DocumentSignedEvent. This is raised when all the signers have signed a document.
+        /// </summary>
+        /// <param name="eventClient"></param>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public static EventClient SubscribeToDocumentSignedEvent(this EventClient eventClient,
+            Func<DocumentSignedEvent, Task> @event)
+        {
+            if(@event!=null)
+                eventClient.SubscribeToDocumentSignedEvent(@event);
+            return eventClient;
+        }
 
         /// <summary>
-        /// Subscribe to DocumentCanceledEvent. This is fired when the document is canceld either by the sender or the receiver
+        /// Subscribe to DocumentCanceledEvent. This is raised when a document is canceled either by the sender or the receiver.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -75,7 +88,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to DocumentSignedPartiallySignedEvent. This is fired when the document is signed, but when it's not the last signer.
+        /// Subscribe to DocumentSignedPartiallySignedEvent. This is raised when a document is signed by one of the signers.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -90,7 +103,7 @@ namespace Idfy.Events.Client
 
 
         /// <summary>
-        /// Subscribe to DocumentFormPartiallySignedEvent. This is fired when a form is signed but there are more signers that haven't signed yet.
+        /// Subscribe to DocumentFormPartiallySignedEvent. This is raised when a form is signed by one of the signers.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -104,7 +117,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to DocumentFormSignedEvent. This is fired when a form is signed if there is more than one signer this is fired when the last signer have signed.
+        /// Subscribe to DocumentFormSignedEvent. This is raised when a form is signed by all required signers.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -118,7 +131,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to DocumentCreatedEvent. This is fired when a new document is created.
+        /// Subscribe to DocumentCreatedEvent. This is raised when a new document is created.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -132,7 +145,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to DocumentExpiredEvent. This is fired when a document has expired.
+        /// Subscribe to DocumentExpiredEvent. This is raised when a document expires.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -145,7 +158,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to DocumentBeforeDeletedEvent. This is fired when a document is about to be deleted.
+        /// Subscribe to DocumentBeforeDeletedEvent. This is raised when a document is about to be deleted.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>
@@ -158,7 +171,7 @@ namespace Idfy.Events.Client
         }
 
         /// <summary>
-        /// Subscribe to the DocumentDeletedEvent. This is fired when a document has been deleted.
+        /// Subscribe to the DocumentDeletedEvent. This is raised when a document is deleted.
         /// </summary>
         /// <param name="eventClient"></param>
         /// <param name="event"></param>

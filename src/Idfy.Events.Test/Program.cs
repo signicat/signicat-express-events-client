@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Idfy.Events.Client;
+using Idfy.Events.Client.Infastructure;
 using Idfy.Events.Entities;
 using Newtonsoft.Json;
 using Rebus.Config;
@@ -16,40 +17,54 @@ namespace Idfy.Events.Test
         
         static void Main(string[] args)
         {
-          var client = EventClient.Setup(new Guid(AccountId), ClientId, ClientSecret, IdfyEnvironment.Test)                
+            var client = EventClient.Setup(new Guid(AccountId), ClientId, ClientSecret, IdfyEnvironment.Test)                
                 .LogToConsole()  
                 .AddRebusCompatibeLogger(x=>x.Serilog(new LoggerConfiguration().WriteTo.ColoredConsole().MinimumLevel.Debug()))
-                .SubscribeToDocumentCreatedEvent(DocumentCreatedEvent)
-                .SubscribeToDocumentSignedEvent(DocumentSignedEvent)
-                .SubscribeToDocumentCanceledEvent(DocumentCanceledEvent)
-                .SubscribeToDocumentPartiallySignedEvent(DocumentPartiallySignedEvent)
+                .SubscribeToAllEvents(EventHandler)
+                .SubscribeToDocumentCreatedEvent(DocumentCreatedEventHandler)
+                .SubscribeToDocumentSignedEvent(DocumentSignedEventHandler)
+                .SubscribeToDocumentCanceledEvent(DocumentCanceledEventHandler)
+                .SubscribeToDocumentPartiallySignedEvent(DocumentPartiallySignedEventHandler)
                 .Start();
             
             Console.ReadLine();
-            client.Dispose();
+            client?.Dispose();
         }
 
-        private static Task DocumentCreatedEvent(DocumentCreatedEvent evt)
+        private static Task EventHandler(Event evt)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(evt, Formatting.Indented));
+            
+            if (evt.Type == EventType.DocumentCreated)
+            {
+                var payload = evt.RawPayload as DocumentCreatedPayload;
+                Console.WriteLine($"A new document with ID {payload?.DocumentId} was created.");
+            }
+            
             return Task.FromResult(0);
         }
 
-        private static Task DocumentPartiallySignedEvent(DocumentPartiallySignedEvent evt)
+        private static Task DocumentCreatedEventHandler(DocumentCreatedEvent evt)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
             return Task.FromResult(0);
         }
 
-        private static  Task DocumentCanceledEvent(DocumentCanceledEvent evt)
+        private static Task DocumentPartiallySignedEventHandler(DocumentPartiallySignedEvent evt)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
             return Task.FromResult(0);
         }
 
-        private static Task DocumentSignedEvent(DocumentSignedEvent evt)
+        private static  Task DocumentCanceledEventHandler(DocumentCanceledEvent evt)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
+            return Task.FromResult(0);
+        }
+
+        private static Task DocumentSignedEventHandler(DocumentSignedEvent evt)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
             return Task.FromResult(0);
         }
     }

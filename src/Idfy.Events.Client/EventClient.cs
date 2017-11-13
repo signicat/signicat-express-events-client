@@ -53,24 +53,26 @@ namespace Idfy.Events.Client
             return new EventClient(adapter, accountId, oauthClientId, oauthClientSecret, environment);
         }
         
-        private EventClient(BuiltinHandlerActivator adapter, Guid accountId, string clientId, string clientSecret, IdfyEnvironment environment)
+        /// <summary>
+        /// Disposes the Event Client, which also disposes the bus. You should always call this method when your program has completed.
+        /// </summary>
+        public void Dispose()
         {
-            _adapter = adapter;
-            _noRebusLogger = true;
-            _environment = environment;
-            _accountId = accountId;
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _scope = "root";
+            _bus?.Dispose();
         }
 
         internal bool LogToConsole { get; set; }
         
-        internal Rebus.Logging.LogLevel? LogLevel { get; set; }
+        internal LogLevel? LogLevel { get; set; }
         
         internal IRebusLoggerFactory RebusLoggerFactory { get; set; }
         
         internal RebusLoggingConfigurer Configurer { get; set; }
+
+        internal void SubscribeToAllEvents(Func<Event, Task> func)
+        {
+            _adapter.Handle(func);
+        }
 
         internal void SubscribeToDocumentSignedEvent(Func<DocumentSignedEvent, Task> func)
         {
@@ -126,6 +128,17 @@ namespace Idfy.Events.Client
         {
             _rebusLoggingConfigurer = config;
             _noRebusLogger = config == null;
+        }
+        
+        private EventClient(BuiltinHandlerActivator adapter, Guid accountId, string clientId, string clientSecret, IdfyEnvironment environment)
+        {
+            _adapter = adapter;
+            _noRebusLogger = true;
+            _environment = environment;
+            _accountId = accountId;
+            _clientId = clientId;
+            _clientSecret = clientSecret;
+            _scope = "root";
         }
 
         private RebusConfigurer ConfigureRebus()
@@ -190,14 +203,6 @@ namespace Idfy.Events.Client
             }
 
             return eventConfigResponse;
-        }
-
-        /// <summary>
-        /// Disposes the Event Client, which also disposes the bus. You should always call this method when your program has completed.
-        /// </summary>
-        public void Dispose()
-        {
-            _bus?.Dispose();
         }
     }
 }
