@@ -21,10 +21,8 @@ namespace Idfy.Events.Test
                 .LogToConsole()  
                 .AddRebusCompatibeLogger(x=>x.Serilog(new LoggerConfiguration().WriteTo.ColoredConsole().MinimumLevel.Debug()))
                 .SubscribeToAllEvents(EventHandler)
-                .SubscribeToDocumentCreatedEvent(DocumentCreatedEventHandler)
-                .SubscribeToDocumentSignedEvent(DocumentSignedEventHandler)
-                .SubscribeToDocumentCanceledEvent(DocumentCanceledEventHandler)
-                .SubscribeToDocumentPartiallySignedEvent(DocumentPartiallySignedEventHandler)
+                .Subscribe<DocumentCreatedEvent>(DocumentCreatedEventHandler)
+                .Subscribe<DocumentSignedEvent>(DocumentSignedEventHandler)
                 .Start();
             
             Console.ReadLine();
@@ -45,18 +43,6 @@ namespace Idfy.Events.Test
         }
 
         private static Task DocumentCreatedEventHandler(DocumentCreatedEvent evt)
-        {
-            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
-            return Task.FromResult(0);
-        }
-
-        private static Task DocumentPartiallySignedEventHandler(DocumentPartiallySignedEvent evt)
-        {
-            Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
-            return Task.FromResult(0);
-        }
-
-        private static  Task DocumentCanceledEventHandler(DocumentCanceledEvent evt)
         {
             Console.WriteLine(JsonConvert.SerializeObject(evt.Payload, Formatting.Indented));
             return Task.FromResult(0);

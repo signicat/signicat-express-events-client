@@ -69,52 +69,12 @@ namespace Idfy.Events.Client
         
         internal RebusLoggingConfigurer Configurer { get; set; }
 
+        internal void Subscribe<T>(Func<T, Task> func) where T : Event
+        {
+            _adapter.Handle(func);
+        }
+
         internal void SubscribeToAllEvents(Func<Event, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentSignedEvent(Func<DocumentSignedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentCanceledEvent(Func<DocumentCanceledEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentPartiallySignedEvent(Func<DocumentPartiallySignedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentFormSignedEvent(Func<DocumentFormSignedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentFormPartiallySignedEvent(Func<DocumentFormPartiallySignedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentCreatedEvent(Func<DocumentCreatedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentExpiredEvent(Func<DocumentExpiredEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentBeforeDeletedEvent(Func<DocumentBeforeDeletedEvent, Task> func)
-        {
-            _adapter.Handle(func);
-        }
-
-        internal void SubscribeToDocumentDeletedEvent(Func<DocumentDeletedEvent, Task> func)
         {
             _adapter.Handle(func);
         }

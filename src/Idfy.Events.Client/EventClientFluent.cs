@@ -47,141 +47,33 @@ namespace Idfy.Events.Client
         }
         
         /// <summary>
-        /// Subscribe to all raised events.
+        /// Subscribes to the specified event. 
+        /// The <paramref name="eventHandler"/> method will be invoked with an event of type <typeparamref name="T"/>
         /// </summary>
         /// <param name="eventClient"></param>
-        /// <param name="event"></param>
+        /// <param name="eventHandler"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static EventClient SubscribeToAllEvents(this EventClient eventClient, Func<Event, Task> @event)
+        public static EventClient Subscribe<T>(this EventClient eventClient, Func<T, Task> eventHandler) where T : Event
         {
-            if (@event != null)
-                eventClient.SubscribeToAllEvents(@event);
+            if (eventHandler != null)
+                eventClient.Subscribe<T>(eventHandler);
             return eventClient;
         }
         
         /// <summary>
-        /// Subscribe to DocumentSignedEvent. This is raised when all the signers have signed a document.
+        /// Subscribe to all raised events
         /// </summary>
         /// <param name="eventClient"></param>
-        /// <param name="event"></param>
+        /// <param name="eventHandler"></param>
         /// <returns></returns>
-        public static EventClient SubscribeToDocumentSignedEvent(this EventClient eventClient,
-            Func<DocumentSignedEvent, Task> @event)
+        public static EventClient SubscribeToAllEvents(this EventClient eventClient, Func<Event, Task> eventHandler)
         {
-            if(@event!=null)
-                eventClient.SubscribeToDocumentSignedEvent(@event);
+            if (eventHandler != null)
+                eventClient.SubscribeToAllEvents(eventHandler);
             return eventClient;
         }
-
-        /// <summary>
-        /// Subscribe to DocumentCanceledEvent. This is raised when a document is canceled either by the sender or the receiver.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentCanceledEvent(this EventClient eventClient,
-           Func<DocumentCanceledEvent, Task> @event)
-        {
-            if(@event!=null)
-                eventClient.SubscribeToDocumentCanceledEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to DocumentSignedPartiallySignedEvent. This is raised when a document is signed by one of the signers.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentPartiallySignedEvent(this EventClient eventClient,
-           Func<DocumentPartiallySignedEvent, Task> @event)
-        {
-            if(@event!=null)
-            eventClient.SubscribeToDocumentPartiallySignedEvent(@event);
-            return eventClient;
-        }
-
-
-        /// <summary>
-        /// Subscribe to DocumentFormPartiallySignedEvent. This is raised when a form is signed by one of the signers.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentFormPartiallySignedEvent(this EventClient eventClient,
-           Func<DocumentFormPartiallySignedEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentFormPartiallySignedEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to DocumentFormSignedEvent. This is raised when a form is signed by all required signers.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentFormSignedEvent(this EventClient eventClient,
-           Func<DocumentFormSignedEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentFormSignedEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to DocumentCreatedEvent. This is raised when a new document is created.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentCreatedEvent(this EventClient eventClient,
-            Func<DocumentCreatedEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentCreatedEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to DocumentExpiredEvent. This is raised when a document expires.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentExpiredEvent(this EventClient eventClient, Func<DocumentExpiredEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentExpiredEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to DocumentBeforeDeletedEvent. This is raised when a document is about to be deleted.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentBeforeDeletedEvent(this EventClient eventClient, Func<DocumentBeforeDeletedEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentBeforeDeletedEvent(@event);
-            return eventClient;
-        }
-
-        /// <summary>
-        /// Subscribe to the DocumentDeletedEvent. This is raised when a document is deleted.
-        /// </summary>
-        /// <param name="eventClient"></param>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public static EventClient SubscribeToDocumentBeforeDeletedEvent(this EventClient eventClient, Func<DocumentDeletedEvent, Task> @event)
-        {
-            if (@event != null)
-                eventClient.SubscribeToDocumentDeletedEvent(@event);
-            return eventClient;
-        }
+     
 
         /// <summary>
         /// Start the event listener. It is important to call this function or the client will not listen to any events
