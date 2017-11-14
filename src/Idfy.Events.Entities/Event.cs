@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Idfy.Events.Entities
 {
@@ -8,6 +9,7 @@ namespace Idfy.Events.Entities
         public EventType Type { get; set; }
         public DateTime Timestamp { get; protected set; }
         public Guid AccountId { get; set; }
+        public IEnumerable<string> Tags { get; set; }
         public abstract object RawPayload { get; }
     }
 
