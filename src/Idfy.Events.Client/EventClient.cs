@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Net;
 using System.Threading.Tasks;
 using Idfy.Events.Client.Infastructure;
 using Idfy.Events.Client.Infastructure.Bus;
@@ -97,7 +98,7 @@ namespace Idfy.Events.Client
             _environment = environment;
             _accountId = accountId;
             _clientId = clientId;
-            _clientSecret = clientSecret;
+            _clientSecret = WebUtility.UrlEncode(clientSecret);
             _scope = "root";
         }
 
