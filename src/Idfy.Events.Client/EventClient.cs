@@ -159,7 +159,7 @@ namespace Idfy.Events.Client
             if (string.IsNullOrWhiteSpace(eventConfigResponse.ConnectionString))
             {
                 // first-time setup of client is required
-                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup"));
+                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup", token: tokenResponse.AccessToken));
             }
 
             return eventConfigResponse;

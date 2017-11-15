@@ -73,10 +73,12 @@ namespace Idfy.Events.Client.Infastructure
                 newUrl = url.Substring(0, url.IndexOf("?", StringComparison.OrdinalIgnoreCase));
                 contentType = "application/x-www-form-urlencoded";
             }
-            
+
             return new HttpRequestMessage(method, new Uri(newUrl))
             {
-                Content = new StringContent(postData, Encoding.UTF8, contentType)
+                Content = !string.IsNullOrWhiteSpace(postData)
+                    ? new StringContent(postData, Encoding.UTF8, contentType)
+                    : null
             };
         }
 
