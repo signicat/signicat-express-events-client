@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Idfy.Events.Client;
 
 namespace Idfy.Events.Client.Infastructure
 {

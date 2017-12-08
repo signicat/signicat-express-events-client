@@ -153,7 +153,7 @@ namespace Idfy.Events.Client
             
             // Get event configuration
             var eventEndpoint = _environment == IdfyEnvironment.Test ? Urls.EventsApiTest : Urls.EventsApiProd;
-            var eventConfigUrl = $"{eventEndpoint}/client/{_accountId}";
+            var eventConfigUrl = $"{eventEndpoint}/client";
 
             var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString(eventConfigUrl, tokenResponse.AccessToken));
 
