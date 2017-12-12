@@ -4,9 +4,9 @@ namespace Idfy.Events.Entities
 {
     public class Signer
     {
-        public Guid SignerId { get; set; }
+        public Guid Id { get; set; }
 
-        public string SignName { get; set; }
+        public string FullName { get; set; }
 
         public DateTime SignedTime { get; set; }
 
@@ -14,9 +14,9 @@ namespace Idfy.Events.Entities
 
         public string ExternalSignerId { get; set; }
 
-        public string IdentityProviderId { get; set; }
+        public string SignatureMethod { get; set; }
 
-        public string IdentityProvider { get; set; }
+        public string SignatureMethodUniqueId { get; set; }
 
         public string SocialSecurityNumber { get; set; }
 

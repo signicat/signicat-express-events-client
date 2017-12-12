@@ -7,6 +7,6 @@ namespace Idfy.Events.Entities
     {
         public DateTime SignedTimeStamp { get; set; }
 
-        public List<Signer> Signees { get; set; }
+        public List<Signer> Signers { get; set; }
     }
 }
