@@ -2,6 +2,6 @@
 {
     public class DocumentDeletedPayload : BaseDocumentPayload
     {
-        public string DeletedMessage { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace Idfy.Events.Entities
 {
     public class DocumentSignedPayload : BaseDocumentPayload
     {
-        public DateTime SignedTimeStamp { get; set; }
+        public DateTime SignedTime { get; set; }
 
         public List<Signer> Signers { get; set; }
     }

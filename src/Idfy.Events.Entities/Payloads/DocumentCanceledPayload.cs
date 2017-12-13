@@ -2,6 +2,6 @@
 {
     public class DocumentCanceledPayload : BaseDocumentPayload
     {
-        public string CanceledMessage { get; set; }
+        public string Message { get; set; }
     }
 }
