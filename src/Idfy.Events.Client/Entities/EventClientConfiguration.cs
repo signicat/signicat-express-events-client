@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Idfy.Events.Client
 {
@@ -9,5 +10,8 @@ namespace Idfy.Events.Client
         
         [JsonProperty("encryptionKey")]
         public string EncryptionKey { get; set; }
+
+        [JsonProperty("accountId")]
+        public Guid AccountId { get; set; }
     }
 }

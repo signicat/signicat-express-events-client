@@ -11,15 +11,15 @@ namespace Idfy.Events.Test
 {
     class Program
     {
-        private const string AccountId = "";
         private const string ClientId = "";
         private const string ClientSecret = "";
         
         static void Main(string[] args)
         {
-            var client = EventClient.Setup(new Guid(AccountId), ClientId, ClientSecret, IdfyEnvironment.Test)                
-                .LogToConsole()  
-                .AddRebusCompatibeLogger(x=>x.Serilog(new LoggerConfiguration().WriteTo.ColoredConsole().MinimumLevel.Debug()))
+            var client = EventClient.Setup(ClientId, ClientSecret)
+                .LogToConsole()
+                .AddRebusCompatibeLogger(x =>
+                    x.Serilog(new LoggerConfiguration().WriteTo.ColoredConsole().MinimumLevel.Debug()))
                 .SubscribeToAllEvents(EventHandler)
                 .Subscribe<DocumentCreatedEvent>(DocumentCreatedEventHandler)
                 .Subscribe<DocumentSignedEvent>(DocumentSignedEventHandler)

@@ -25,8 +25,6 @@ namespace Idfy.Events.Client
         private bool _noRebusLogger;
         
         private readonly BuiltinHandlerActivator _adapter;
-        private readonly IdfyEnvironment _environment;
-        private readonly Guid _accountId;
         private readonly string _clientId;
         private readonly string _clientSecret;
         private readonly string _scope;
@@ -34,16 +32,11 @@ namespace Idfy.Events.Client
         /// <summary>
         /// Sets up the event client to subscribe to events that occurs on the provided account.
         /// </summary>
-        /// <param name="accountId">Your Idfy account ID</param>
         /// <param name="oauthClientId">Your OAuth client ID</param>
         /// <param name="oauthClientSecret">Your OAuth client secret</param>
-        /// <param name="environment">The environment to use</param>
         /// <returns><see cref="EventClient"/></returns>
-        public static EventClient Setup(Guid accountId, string oauthClientId, string oauthClientSecret, IdfyEnvironment environment = IdfyEnvironment.Production)
+        public static EventClient Setup(string oauthClientId, string oauthClientSecret)
         {
-            if (accountId == Guid.Empty)
-                throw new ArgumentNullException(nameof(accountId));
-            
             if (string.IsNullOrWhiteSpace(oauthClientId))
                 throw new ArgumentNullException(nameof(oauthClientId));
             
@@ -51,7 +44,7 @@ namespace Idfy.Events.Client
                 throw new ArgumentNullException(nameof(oauthClientSecret));
             
             var adapter = new BuiltinHandlerActivator();
-            return new EventClient(adapter, accountId, oauthClientId, oauthClientSecret, environment);
+            return new EventClient(adapter, oauthClientId, oauthClientSecret);
         }
         
         /// <summary>
@@ -91,12 +84,10 @@ namespace Idfy.Events.Client
             _noRebusLogger = config == null;
         }
         
-        private EventClient(BuiltinHandlerActivator adapter, Guid accountId, string clientId, string clientSecret, IdfyEnvironment environment)
+        private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret)
         {
             _adapter = adapter;
             _noRebusLogger = true;
-            _environment = environment;
-            _accountId = accountId;
             _clientId = clientId;
             _clientSecret = WebUtility.UrlEncode(clientSecret);
             _scope = "root";
@@ -105,7 +96,7 @@ namespace Idfy.Events.Client
         private RebusConfigurer ConfigureRebus()
         {
             var config = GetEventClientConfiguration();
-            var queueName = _accountId.ToString("n");
+            var queueName = config.AccountId.ToString("n");
 
             return Configure.With(_adapter)
                 .Transport(x => x.UseAzureServiceBus(config.ConnectionString, queueName, AzureServiceBusMode.Basic)
@@ -138,7 +129,6 @@ namespace Idfy.Events.Client
         private EventClientConfiguration GetEventClientConfiguration()
         {
             // Get access token
-            var tokenEndpoint = _environment == IdfyEnvironment.Test ? Urls.OauthTest : Urls.OauthProd;
             var queryParams = new NameValueCollection()
             {
                 {"grant_type", "client_credentials"},
@@ -147,13 +137,10 @@ namespace Idfy.Events.Client
                 {"client_secret", _clientSecret}
             }.ToQueryString();
             
-            var tokenUrl = $@"{tokenEndpoint}{queryParams}";
-            
-            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostString(tokenUrl));
+            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostString($"{Urls.TokenEndpoint}{queryParams}"));
             
             // Get event configuration
-            var eventEndpoint = _environment == IdfyEnvironment.Test ? Urls.EventsApiTest : Urls.EventsApiProd;
-            var eventConfigUrl = $"{eventEndpoint}/client";
+            var eventConfigUrl = $"{Urls.NotificationEndpoint}/client";
 
             var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString(eventConfigUrl, tokenResponse.AccessToken));
 
