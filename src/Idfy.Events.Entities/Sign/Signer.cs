@@ -17,8 +17,5 @@ namespace Idfy.Events.Entities
         public string SignatureMethod { get; set; }
 
         public string SignatureMethodUniqueId { get; set; }
-
-        public string SocialSecurityNumber { get; set; }
-
     }
 }
