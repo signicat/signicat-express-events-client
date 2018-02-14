@@ -20,14 +20,15 @@ namespace Idfy.Events.Client
     /// </summary>
     public class EventClient : IDisposable
     {
-        private IBus _bus;
-        private Action<RebusLoggingConfigurer> _rebusLoggingConfigurer;
-        private bool _noRebusLogger;
-        
+        private const string Scope = "event";
+
         private readonly BuiltinHandlerActivator _adapter;
         private readonly string _clientId;
         private readonly string _clientSecret;
-        private readonly string _scope;
+        
+        private IBus _bus;
+        private Action<RebusLoggingConfigurer> _rebusLoggingConfigurer;
+        private bool _noRebusLogger;
 
         /// <summary>
         /// Sets up the event client to subscribe to events that occurs on the provided account.
@@ -90,7 +91,6 @@ namespace Idfy.Events.Client
             _noRebusLogger = true;
             _clientId = clientId;
             _clientSecret = WebUtility.UrlEncode(clientSecret);
-            _scope = "root";
         }
 
         private RebusConfigurer ConfigureRebus()
@@ -132,7 +132,7 @@ namespace Idfy.Events.Client
             var queryParams = new NameValueCollection()
             {
                 {"grant_type", "client_credentials"},
-                {"scope", _scope},
+                {"scope", Scope},
                 {"client_id", _clientId},
                 {"client_secret", _clientSecret}
             }.ToQueryString();
