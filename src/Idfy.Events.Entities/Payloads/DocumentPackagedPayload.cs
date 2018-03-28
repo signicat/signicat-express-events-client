@@ -6,7 +6,7 @@ namespace Idfy.Events.Entities
     {
         public string DownloadUrl { get; set; }
         
-        public DateTime UrlExpiresAt { get; set; }
+        public DateTime? UrlExpiresAt { get; set; }
         
         public string Checksum { get; set; }
         
