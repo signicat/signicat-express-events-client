@@ -6,7 +6,7 @@ You can read more about the various events in our [documentation](https://develo
 
 ## Example
 
-This example shows how to set up the client and subscribe to events. We have set up our subscriptions with one handler that will trigger on allevents that are raised, and one handler that only triggers for the `DocumentCreated` event. 
+This example shows how to set up the client and subscribe to events. We have set up our subscriptions with one handler that will trigger on all events that are raised, and one handler that only triggers for the `DocumentCreated` event. 
 
 ```csharp
 class Program
