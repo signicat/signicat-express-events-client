@@ -20,7 +20,7 @@ namespace Idfy.Events.Client
     /// </summary>
     public class EventClient : IDisposable
     {
-        private const string Scope = "root";
+        private const string Scope = "event";
 
         private readonly BuiltinHandlerActivator _adapter;
         private readonly string _clientId;
