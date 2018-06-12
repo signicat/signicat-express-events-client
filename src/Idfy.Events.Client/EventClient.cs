@@ -20,7 +20,7 @@ namespace Idfy.Events.Client
     /// </summary>
     public class EventClient : IDisposable
     {
-        private const string Scope = "event";
+        private const string Scope = "root";
 
         private readonly BuiltinHandlerActivator _adapter;
         private readonly string _clientId;
@@ -96,10 +96,9 @@ namespace Idfy.Events.Client
         private RebusConfigurer ConfigureRebus()
         {
             var config = GetEventClientConfiguration();
-            var queueName = config.AccountId.ToString("n");
 
             return Configure.With(_adapter)
-                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, queueName, AzureServiceBusMode.Basic)
+                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName, AzureServiceBusMode.Basic)
                     .DoNotCreateQueues())
                 .Options(c =>
                 {
@@ -129,25 +128,25 @@ namespace Idfy.Events.Client
         private EventClientConfiguration GetEventClientConfiguration()
         {
             // Get access token
-            var queryParams = new NameValueCollection()
+            var formData = new NameValueCollection()
             {
                 {"grant_type", "client_credentials"},
                 {"scope", Scope},
                 {"client_id", _clientId},
                 {"client_secret", _clientSecret}
-            }.ToQueryString();
+            };
             
-            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostString($"{Urls.TokenEndpoint}{queryParams}"));
+            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostFormData(Urls.TokenEndpoint, formData));
             
             // Get event configuration
             var eventConfigUrl = $"{Urls.NotificationEndpoint}/client";
 
-            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString(eventConfigUrl, tokenResponse.AccessToken));
+            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString($"{eventConfigUrl}?v2=true", tokenResponse.AccessToken));
 
             if (string.IsNullOrWhiteSpace(eventConfigResponse.ConnectionString))
             {
                 // first-time setup of client is required
-                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup", token: tokenResponse.AccessToken));
+                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup?v2=true", token: tokenResponse.AccessToken));
             }
 
             return eventConfigResponse;

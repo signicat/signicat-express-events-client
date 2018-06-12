@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -31,6 +32,20 @@ namespace Idfy.Events.Client.Infastructure
             return ExecuteRequestAsync(request);
         }
 
+        public static IdfyResponse PostFormData(string url, NameValueCollection formData, string token = null)
+        {
+            var request = GetRequestMessage(url, HttpMethod.Post, formData: formData);
+
+            return ExecuteRequest(request);
+        }
+        
+        public static Task<IdfyResponse> PostFormDataAsync(string url, NameValueCollection formData, string token = null)
+        {
+            var request = GetRequestMessage(url, HttpMethod.Post, formData: formData);
+
+            return ExecuteRequestAsync(request);
+        }
+
         public static IdfyResponse PostString(string url, string jsonBody = null, string token = null)
         {
             var request = GetRequestMessage(url, HttpMethod.Post, token, jsonBody);
@@ -45,9 +60,9 @@ namespace Idfy.Events.Client.Infastructure
             return ExecuteRequestAsync(request);
         }
 
-        private static HttpRequestMessage GetRequestMessage(string url, HttpMethod method, string token = null, string jsonBody = null)
+        private static HttpRequestMessage GetRequestMessage(string url, HttpMethod method, string token = null, string jsonBody = null, NameValueCollection formData = null)
         {
-            var request = BuildRequest(url, method, jsonBody);
+            var request = BuildRequest(url, method, jsonBody, formData);
 
             if (!string.IsNullOrWhiteSpace(token))
             {
@@ -57,23 +72,21 @@ namespace Idfy.Events.Client.Infastructure
             return request;
         }
 
-        private static HttpRequestMessage BuildRequest(string url, HttpMethod method, string jsonBody = null)
+        private static HttpRequestMessage BuildRequest(string url, HttpMethod method, string jsonBody = null, NameValueCollection formData = null)
         {
             if (method != HttpMethod.Post)
                 return new HttpRequestMessage(method, new Uri(url));
 
             var postData = jsonBody;
             var contentType = "application/json";
-            var newUrl = url;
 
-            if (string.IsNullOrWhiteSpace(jsonBody) && !string.IsNullOrWhiteSpace(new Uri(url).Query))
+            if (string.IsNullOrWhiteSpace(jsonBody) && formData != null)
             {
-                postData = new Uri(url).Query.Substring(1);
-                newUrl = url.Substring(0, url.IndexOf("?", StringComparison.OrdinalIgnoreCase));
+                postData = formData.ToQueryString().Substring(1);
                 contentType = "application/x-www-form-urlencoded";
             }
 
-            return new HttpRequestMessage(method, new Uri(newUrl))
+            return new HttpRequestMessage(method, new Uri(url))
             {
                 Content = !string.IsNullOrWhiteSpace(postData)
                     ? new StringContent(postData, Encoding.UTF8, contentType)

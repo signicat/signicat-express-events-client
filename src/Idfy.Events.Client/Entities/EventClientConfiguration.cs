@@ -5,6 +5,9 @@ namespace Idfy.Events.Client
 {
     public class EventClientConfiguration
     {
+        [JsonProperty("clientId")]
+        public string ClientId { get; set; }
+        
         [JsonProperty("connectionString")]
         public string ConnectionString { get; set; }
         
@@ -13,5 +16,8 @@ namespace Idfy.Events.Client
 
         [JsonProperty("accountId")]
         public Guid AccountId { get; set; }
+        
+        [JsonProperty("queueName")]
+        public string QueueName { get; set; }
     }
 }
