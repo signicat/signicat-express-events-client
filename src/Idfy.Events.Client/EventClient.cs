@@ -88,6 +88,8 @@ namespace Idfy.Events.Client
         private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret)
         {
             _adapter = adapter;
+            _adapter.Handle<object>(InternalHandler);
+            
             _noRebusLogger = true;
             _clientId = clientId;
             _clientSecret = WebUtility.UrlEncode(clientSecret);
@@ -150,6 +152,16 @@ namespace Idfy.Events.Client
             }
 
             return eventConfigResponse;
+        }
+        
+        /// <summary>
+        /// Internal handler for all message types. Prevents exceptions for events with no registered handler.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private static Task InternalHandler(object msg)
+        {
+            return Task.FromResult(0);
         }
     }
 }
