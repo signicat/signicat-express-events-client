@@ -49,6 +49,7 @@
     <Compile Include="Events\DocumentReadEvent.cs" />
     <Compile Include="Events\DocumentSignedEvent.cs" />
     <Compile Include="Events\DocumentEmailOpenedEvent.cs" />
+    <Compile Include="Events\ResourceCreatedEvent.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="Payloads\BaseDocumentPayload.cs" />
     <Compile Include="Payloads\DocumentBeforeDeletedPayload.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Payloads\DocumentReadPayload.cs" />
     <Compile Include="Payloads\DocumentSignedPayload.cs" />
     <Compile Include="Payloads\DocumentEmailOpenedPayload.cs" />
+    <Compile Include="Payloads\ResourceCreatedPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sign\Signer.cs" />
   </ItemGroup>

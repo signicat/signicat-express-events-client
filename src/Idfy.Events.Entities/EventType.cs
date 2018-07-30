@@ -56,5 +56,9 @@ namespace Idfy.Events.Entities
         [EnumMember(Value = "document_signed")]
         [Description("When a document is signed by all required signers.")]
         DocumentSigned,
+        
+        [EnumMember(Value = "resource_created")]
+        [Description("When a resource is created and available for download.")]
+        ResourceCreated,
     }
 }
