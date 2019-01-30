@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Idfy.Events.Client;
-using Idfy.Events.Client.Infastructure;
 using Idfy.Events.Entities;
 using Newtonsoft.Json;
 using Rebus.Config;
 using Serilog;
 
-namespace Idfy.Events.Test
+namespace Idfy.Events.Test3
 {
     class Program
     {
-        private const string ClientId = "";
-        private const string ClientSecret = "";
+        private const string ClientId = "tb1133afb2a1140b383c27f70eede45b7";
+        private const string ClientSecret = "NlXqhRB1ZKTc0RMqxl8rtyXDzs4+LpZX4DPjtH2ir6w=";
         
         static void Main(string[] args)
         {
