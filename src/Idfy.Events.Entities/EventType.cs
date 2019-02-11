@@ -60,5 +60,26 @@ namespace Idfy.Events.Entities
         [EnumMember(Value = "resource_created")]
         [Description("When a resource is created and available for download.")]
         ResourceCreated,
+        [EnumMember(Value = "share_created")]
+        [Description("When a new share is created.")]
+        ShareCreated,
+                
+        [EnumMember(Value = "share_deleted")]
+        [Description("When a share is deleted.")]
+        ShareDeleted,
+                
+        [EnumMember(Value = "share_recipients_authenticated")]
+        [Description("When a Receipient successfully authenticated.")]
+        ShareReceipientsAuthenticated,
+                
+        [EnumMember(Value = "share_recipient_downloaded")]
+        [Description("When a recipient downloaded from share.")]
+        ShareReceipientDownloaded,
+        [EnumMember(Value = "share_downloaded")]
+        [Description("When all shares have been downloaded.")]
+        ShareDownloaded,
+        [EnumMember(Value = "share_expired")]
+        [Description("When a share expires and are being cleaned up.")]
+        ShareExpired
     }
 }
