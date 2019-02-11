@@ -2,7 +2,7 @@
 
 namespace Idfy.Events.Entities
 {
-    public class ShareReceipientDownloadedPayload: BaseSharePayload
+    public class ShareRecipientDownloadedPayload: BaseSharePayload
     {
         public string RecipientId { get; set; }
         public string RecipientExternalId { get; set; }   

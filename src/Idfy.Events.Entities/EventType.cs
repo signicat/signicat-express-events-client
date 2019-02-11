@@ -70,11 +70,11 @@ namespace Idfy.Events.Entities
                 
         [EnumMember(Value = "share_recipients_authenticated")]
         [Description("When a Receipient successfully authenticated.")]
-        ShareReceipientsAuthenticated,
+        ShareRecipientsAuthenticated,
                 
         [EnumMember(Value = "share_recipient_downloaded")]
         [Description("When a recipient downloaded from share.")]
-        ShareReceipientDownloaded,
+        ShareRecipientDownloaded,
         [EnumMember(Value = "share_downloaded")]
         [Description("When all shares have been downloaded.")]
         ShareDownloaded,
