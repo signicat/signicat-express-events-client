@@ -80,6 +80,22 @@ namespace Idfy.Events.Entities
         ShareDownloaded,
         [EnumMember(Value = "share_expired")]
         [Description("When a share expires and are being cleaned up.")]
-        ShareExpired
+        ShareExpired,
+        
+        [EnumMember(Value = "deposit_created")]
+        [Description("When a new deposit is created.")]
+        DepositCreated,
+                      
+        [EnumMember(Value = "deposit_terminated")]
+        [Description("When a deposit is terminated.")]
+        DepositTerminated,
+        
+        [EnumMember(Value = "deposit_fully_funded")]
+        [Description("When full payment has been made to the deposit.")]
+        DepositFullyFunded,
+        
+        [EnumMember(Value = "deposit_partially_funded")]
+        [Description("When partial payment has been made to the deposit.")]
+        DepositPartiallyFunded
     }
 }
