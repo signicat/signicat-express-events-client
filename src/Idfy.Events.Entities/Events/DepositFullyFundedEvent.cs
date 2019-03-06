@@ -2,9 +2,9 @@ using System;
 
 namespace Idfy.Events.Entities
 {
-    public class DepositFullyFundedEvent : Event<DepositFullyFundedEvent>
+    public class DepositFullyFundedEvent : Event<DepositFullyFundedPayload>
     {
-        public DepositFullyFundedEvent(DepositFullyFundedEvent payload, Guid accountId) 
+        public DepositFullyFundedEvent(DepositFullyFundedPayload payload, Guid accountId) 
             : base(EventType.DepositFullyFunded, payload, accountId)
         {
         }
