@@ -4,7 +4,7 @@ namespace Idfy.Events.Entities
 {
     public class ShareExpiredEvent: Event<ShareExpiredPayload>
     {
-        public ShareExpiredEvent(EventType type, ShareExpiredPayload payload, Guid accountId) : base(type, payload, accountId)
+        public ShareExpiredEvent(ShareExpiredPayload payload, Guid accountId) : base(EventType.ShareExpired, payload, accountId)
         {
         }
     }

@@ -4,7 +4,7 @@ namespace Idfy.Events.Entities
 {
     public class ShareRecipientsAuthenticatedEvent:Event<ShareRecipientsAuthenticatedPayload>
     {
-        public ShareRecipientsAuthenticatedEvent(EventType type, ShareRecipientsAuthenticatedPayload payload, Guid accountId) : base(type, payload, accountId)
+        public ShareRecipientsAuthenticatedEvent(ShareRecipientsAuthenticatedPayload payload, Guid accountId) : base(EventType.ShareRecipientsAuthenticated, payload, accountId)
         {
         }
     }

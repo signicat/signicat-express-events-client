@@ -4,7 +4,7 @@ namespace Idfy.Events.Entities
 {
     public class ShareCreatedEvent: Event<ShareCreatedPayload>
     {
-        public ShareCreatedEvent(EventType type, ShareCreatedPayload payload, Guid accountId) : base(type, payload, accountId)
+        public ShareCreatedEvent(ShareCreatedPayload payload, Guid accountId) : base(EventType.ShareCreated, payload, accountId)
         {
         }
     }
