@@ -7,6 +7,7 @@ namespace Idfy.Events.Entities
         public DocumentFormPartiallySignedEvent(DocumentFormPartiallySignedPayload payload, Guid accountId) 
             : base(EventType.DocumentFormPartiallySigned, payload, accountId)
         {
+            throw new Exception("Oh shit!");
         }
     }
 }
