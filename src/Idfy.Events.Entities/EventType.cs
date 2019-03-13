@@ -7,95 +7,95 @@ namespace Idfy.Events.Entities
     {
         [EnumMember(Value = "document_before_deleted")]
         [Description("When a document is about to be deleted.")]
-        DocumentBeforeDeleted,
+        DocumentBeforeDeleted = 0,
         
         [EnumMember(Value = "document_canceled")]
         [Description("When a document is canceled.")]
-        DocumentCanceled,
+        DocumentCanceled = 1,
         
         [EnumMember(Value = "document_created")]
         [Description("When a new document is created.")]
-        DocumentCreated,
+        DocumentCreated = 2,
         
         [EnumMember(Value = "document_deleted")]
         [Description("When a document is deleted.")]
-        DocumentDeleted,
+        DocumentDeleted = 3,
         
         [EnumMember(Value = "document_expired")]
         [Description("When a document expires.")]
-        DocumentExpired,
+        DocumentExpired = 4,
         
         [EnumMember(Value = "document_email_opened")]
         [Description("When a signer opens a document email.")]
-        DocumentEmailOpened,
+        DocumentEmailOpened = 5,
         
         [EnumMember(Value = "document_form_partially_signed")]
         [Description("When a form is partially signed.")]
-        DocumentFormPartiallySigned,
+        DocumentFormPartiallySigned = 6,
         
         [EnumMember(Value = "document_form_signed")]
         [Description("When a form is signed by all required signers.")]
-        DocumentFormSigned,
+        DocumentFormSigned = 7,
         
         [EnumMember(Value = "document_link_opened")]
         [Description("When a document link is opened by a signer.")]
-        DocumentLinkOpened,
+        DocumentLinkOpened = 8,
         
         [EnumMember(Value = "document_packaged")]
         [Description("When a document is packaged with all signatures.")]
-        DocumentPackaged,
+        DocumentPackaged = 9,
         
         [EnumMember(Value = "document_partially_signed")]
         [Description("When a document is partially signed.")]
-        DocumentPartiallySigned,
+        DocumentPartiallySigned = 10,
         
         [EnumMember(Value = "document_read")]
         [Description("When a document is read by a signer.")]
-        DocumentRead,
+        DocumentRead = 11,
         
         [EnumMember(Value = "document_signed")]
         [Description("When a document is signed by all required signers.")]
-        DocumentSigned,
+        DocumentSigned = 12,
         
         [EnumMember(Value = "resource_created")]
         [Description("When a resource is created and available for download.")]
-        ResourceCreated,
+        ResourceCreated = 13,
         [EnumMember(Value = "share_created")]
         [Description("When a new share is created.")]
-        ShareCreated,
+        ShareCreated = 14,
                 
         [EnumMember(Value = "share_deleted")]
         [Description("When a share is deleted.")]
-        ShareDeleted,
+        ShareDeleted = 15,
                 
         [EnumMember(Value = "share_recipients_authenticated")]
         [Description("When a Receipient successfully authenticated.")]
-        ShareRecipientsAuthenticated,
+        ShareRecipientsAuthenticated = 16,
                 
         [EnumMember(Value = "share_recipient_downloaded")]
         [Description("When a recipient downloaded from share.")]
-        ShareRecipientDownloaded,
+        ShareRecipientDownloaded = 17,
         [EnumMember(Value = "share_downloaded")]
         [Description("When all shares have been downloaded.")]
-        ShareDownloaded,
+        ShareDownloaded = 18,
         [EnumMember(Value = "share_expired")]
         [Description("When a share expires and are being cleaned up.")]
-        ShareExpired,
+        ShareExpired = 19,
         
         [EnumMember(Value = "deposit_created")]
         [Description("When a new deposit is created.")]
-        DepositCreated,
+        DepositCreated = 20,
                       
         [EnumMember(Value = "deposit_terminated")]
         [Description("When a deposit is terminated.")]
-        DepositTerminated,
+        DepositTerminated = 21,
         
         [EnumMember(Value = "deposit_fully_funded")]
         [Description("When full payment has been made to the deposit.")]
-        DepositFullyFunded,
+        DepositFullyFunded = 22,
         
         [EnumMember(Value = "deposit_partially_funded")]
         [Description("When partial payment has been made to the deposit.")]
-        DepositPartiallyFunded
+        DepositPartiallyFunded = 23
     }
 }
