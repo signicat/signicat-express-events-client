@@ -23,6 +23,7 @@ namespace Idfy.Events.Test3
 
             var dictionary = new Dictionary<EventType, Type>();
 
+            // Enumerate all classes implementing Event
             foreach (var evType in Assembly.GetAssembly(typeof(Event)).GetTypes()
                 .Where(t => !t.IsAbstract && typeof(Event).IsAssignableFrom(t)))
             {
@@ -43,12 +44,23 @@ namespace Idfy.Events.Test3
                 }
             }
 
+            // Find any missing EventTypes
+            foreach (var evType in Enum.GetValues(typeof(EventType)).Cast<EventType>())
+            {
+                if (!dictionary.ContainsKey(evType))
+                {
+                    var error = $"EventType {evType} has no implementing class";
+                    errors.Add(new KeyValuePair<Exception, string>(null, error));
+                }
+            }
+
             for (var i = 0; i < errors.Count; i++)
             {
                 var error = errors[i];
-                TestContext.Error.WriteLine($"Error #{i+1}:");
+                TestContext.Error.WriteLine($"Error #{i + 1}:");
                 TestContext.Error.WriteLine(error.Value);
-                TestContext.Error.WriteLine(error.Value);
+                if (error.Key != null)
+                    TestContext.Error.WriteLine(error.Key.ToString());
             }
 
             Assert.IsEmpty(errors);
