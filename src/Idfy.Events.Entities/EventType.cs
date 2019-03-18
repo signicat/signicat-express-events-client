@@ -96,6 +96,10 @@ namespace Idfy.Events.Entities
         
         [EnumMember(Value = "deposit_partially_funded")]
         [Description("When partial payment has been made to the deposit.")]
-        DepositPartiallyFunded = 23
+        DepositPartiallyFunded = 23,
+        
+        [EnumMember(Value = "deposit_bank_account_created")]
+        [Description("When a bank account is created.")]
+        DepositBankAccountCreated = 24
     }
 }
