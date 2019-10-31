@@ -100,8 +100,11 @@ namespace Idfy.Events.Client
             var config = GetEventClientConfiguration();
 
             return Configure.With(_adapter)
-                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName, AzureServiceBusMode.Basic)
-                    .DoNotCreateQueues())
+                #if NET45
+                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName, AzureServiceBusMode.Basic).DoNotCreateQueues())
+                #else
+                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName).DoNotCreateQueues())
+                #endif
                 .Options(c =>
                 {
                     c.AddNamespaceFilter();
