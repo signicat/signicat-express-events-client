@@ -103,7 +103,7 @@ namespace Idfy.Events.Client
                 #if NET45
                 .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName, AzureServiceBusMode.Basic).DoNotCreateQueues())
                 #else
-                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName).DoNotCreateQueues())
+                .Transport(x => x.UseAzureServiceBus(config.ConnectionString, config.QueueName).DoNotCreateQueues().DoNotCheckQueueConfiguration())
                 #endif
                 .Options(c =>
                 {
