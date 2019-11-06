@@ -100,6 +100,22 @@ namespace Idfy.Events.Entities
         
         [EnumMember(Value = "deposit_bank_account_created")]
         [Description("When a bank account is created.")]
-        DepositBankAccountCreated = 24
+        DepositBankAccountCreated = 24,
+        
+        [EnumMember(Value = "self_declaration_assignment_created")]
+        [Description("When a new self declaration assignment is created.")]
+        SelfDeclarationAssignmentCreated = 25,
+        
+        [EnumMember(Value = "self_declaration_opened")]
+        [Description("When a self declaration link is opened.")]
+        SelfDeclarationOpened = 26,
+        
+        [EnumMember(Value = "self_declaration_finished")]
+        [Description("When a self declaration is finished.")]
+        SelfDeclarationFinished = 27,
+        
+        [EnumMember(Value = "self_declaration_assignment_finished")]
+        [Description("When a self declaration assignment is finished.")]
+        SelfDeclarationAssignmentFinished = 28
     }
 }
