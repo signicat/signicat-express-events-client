@@ -3,8 +3,7 @@ using Idfy.Events.Entities;
 
 namespace Idfy.Events.Entities
 {
-    public class SelfDeclarationAssignmentCreatedPayload : BaseDepositPayload
+    public class SelfDeclarationAssignmentCreatedPayload : BaseSelfDeclarationPayload
     {
-        public Guid PersonId { get; set; }
     }
 }
