@@ -1,23 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Idfy.Events.Entities;
 using NUnit.Framework;
-using Serilog;
 
-namespace Idfy.Events.Test3
+namespace Idfy.Events.Tests
 {
-    public class EventTypeTest
+    public class EventTypeTests
     {
         /// <summary>
-        /// Every <see cref="EventType"/> should have one and only one implementing class
+        /// Every <see cref="EventType"/> should have one and only one implementing class.
         /// </summary>
         [Test]
-        public void AssertAllEventTypesOneToOneClass()
+        public void EventType_should_have_one_implementing_class()
         {
             var errors = new List<KeyValuePair<Exception, string>>();
 

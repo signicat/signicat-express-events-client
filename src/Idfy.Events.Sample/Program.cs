@@ -3,22 +3,21 @@ using System.Threading.Tasks;
 using Idfy.Events.Client;
 using Idfy.Events.Entities;
 using Newtonsoft.Json;
-using Rebus.Config;
-using Serilog;
+using Rebus.Logging;
 
-namespace Idfy.Events.Test3
+namespace Idfy.Events.Sample
 {
     class Program
     {
-        private const string ClientId = "";
-        private const string ClientSecret = "";
+        private const string ClientId = "tb1133afb2a1140b383c27f70eede45b7";
+        private const string ClientSecret = "tthx1kGj9Ew8c6RCMXMwj2ncWaKBmkdU";
         
         static void Main(string[] args)
         {
             var client = EventClient.Setup(ClientId, ClientSecret)
                 .LogToConsole()
                 .AddRebusCompatibeLogger(x =>
-                    x.Serilog(new LoggerConfiguration().WriteTo.ColoredConsole().MinimumLevel.Debug()))
+                    x.Console(LogLevel.Info))
                 .SubscribeToAllEvents(EventHandler)
                 .Subscribe<DocumentCreatedEvent>(DocumentCreatedEventHandler)
                 .Subscribe<DocumentSignedEvent>(DocumentSignedEventHandler)
