@@ -9,8 +9,8 @@ namespace Idfy.Events.Sample
 {
     class Program
     {
-        private const string ClientId = "tb1133afb2a1140b383c27f70eede45b7";
-        private const string ClientSecret = "tthx1kGj9Ew8c6RCMXMwj2ncWaKBmkdU";
+        private const string ClientId = "";
+        private const string ClientSecret = "";
         
         static void Main(string[] args)
         {
