@@ -116,6 +116,22 @@ namespace Idfy.Events.Entities
         
         [EnumMember(Value = "self_declaration_assignment_finished")]
         [Description("When a self declaration assignment is finished.")]
-        SelfDeclarationAssignmentFinished = 28
+        SelfDeclarationAssignmentFinished = 28,
+        
+        [EnumMember(Value = "email_delivered")]
+        [Description("When the email was successfully delivered to the recipient")]
+        EmailDelivered = 29,
+        
+        [EnumMember(Value = "email_failed")]
+        [Description("When the email failed to be delivered to the recipient")]
+        EmailFailed = 30,
+        
+        [EnumMember(Value = "sms_delivered")]
+        [Description("When the sms was successfully delivered to the recipient")]
+        SmsDelivered = 31,
+        
+        [EnumMember(Value = "sms_failed")]
+        [Description("When the sms failed to be delivered to the recipient")]
+        SmsFailed = 32
     }
 }
