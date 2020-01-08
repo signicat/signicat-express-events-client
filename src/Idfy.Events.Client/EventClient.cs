@@ -25,10 +25,12 @@ namespace Idfy.Events.Client
         private readonly BuiltinHandlerActivator _adapter;
         private readonly string _clientId;
         private readonly string _clientSecret;
-        
+        private readonly string _tokenUrl;
+
         private IBus _bus;
         private Action<RebusLoggingConfigurer> _rebusLoggingConfigurer;
         private bool _noRebusLogger;
+        
 
         /// <summary>
         /// Sets up the event client to subscribe to events that occurs on the provided account.
@@ -47,7 +49,29 @@ namespace Idfy.Events.Client
             var adapter = new BuiltinHandlerActivator();
             return new EventClient(adapter, oauthClientId, oauthClientSecret);
         }
-        
+
+        /// <summary>
+        /// Sets up the event client to subscribe to events that occurs on the provided account.
+        /// </summary>
+        /// <param name="oauthClientId">Your OAuth client ID</param>
+        /// <param name="oauthClientSecret">Your OAuth client secret</param>
+        /// <param name="oauthServerUrl">The url to the oauth2 server (only for dev testing)</param>
+        /// <returns><see cref="EventClient"/></returns>
+        public static EventClient Setup(string oauthClientId, string oauthClientSecret, string oauthServerUrl)
+        {
+            if (string.IsNullOrWhiteSpace(oauthClientId))
+                throw new ArgumentNullException(nameof(oauthClientId));
+
+            if (string.IsNullOrWhiteSpace(oauthClientSecret))
+                throw new ArgumentNullException(nameof(oauthClientSecret));
+
+            if (string.IsNullOrWhiteSpace(oauthServerUrl))
+                throw new ArgumentNullException(nameof(oauthServerUrl));
+            
+            var adapter = new BuiltinHandlerActivator();
+            return new EventClient(adapter, oauthClientId, oauthClientSecret, oauthServerUrl.EnsureEndsWithSlash());
+        }
+
         /// <summary>
         /// Disposes the Event Client, which also disposes the bus. You should always call this method when your program has completed.
         /// </summary>
@@ -85,7 +109,7 @@ namespace Idfy.Events.Client
             _noRebusLogger = config == null;
         }
         
-        private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret)
+        private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret, string tokenUrl=null)
         {
             _adapter = adapter;
             _adapter.Handle<object>(InternalHandler);
@@ -93,7 +117,10 @@ namespace Idfy.Events.Client
             _noRebusLogger = true;
             _clientId = clientId;
             _clientSecret = WebUtility.UrlEncode(clientSecret);
+            _tokenUrl = tokenUrl;
         }
+
+        
 
         private RebusConfigurer ConfigureRebus()
         {
@@ -141,7 +168,7 @@ namespace Idfy.Events.Client
                 {"client_secret", _clientSecret}
             };
             
-            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostFormData(Urls.TokenEndpoint, formData));
+            var tokenResponse = Mapper<TokenResponse>.MapFromJson(Requestor.PostFormData(string.IsNullOrWhiteSpace(_tokenUrl) ? Urls.TokenEndpoint:_tokenUrl, formData));
             
             // Get event configuration
             var eventConfigUrl = $"{Urls.NotificationEndpoint}/client";

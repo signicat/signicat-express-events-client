@@ -31,6 +31,18 @@ namespace Idfy.Events.Client.Infastructure
                 Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
             }
         }
+
+        internal static string EnsureEndsWithSlash(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            if (!value.EndsWith("/"))
+                value += "/";
+
+            return value;
+        }
+
         
         public static string ToQueryString(this NameValueCollection nvc)
         {
