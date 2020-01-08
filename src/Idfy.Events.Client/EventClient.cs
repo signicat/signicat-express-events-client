@@ -69,7 +69,7 @@ namespace Idfy.Events.Client
                 throw new ArgumentNullException(nameof(oauthServerUrl));
             
             var adapter = new BuiltinHandlerActivator();
-            return new EventClient(adapter, oauthClientId, oauthClientSecret, oauthServerUrl.EnsureEndsWithSlash());
+            return new EventClient(adapter, oauthClientId, oauthClientSecret, $"{oauthServerUrl.EnsureEndsWithSlash()}connect/token");
         }
 
         /// <summary>
