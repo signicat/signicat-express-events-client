@@ -2,9 +2,9 @@ using System;
 
 namespace Idfy.Events.Entities
 {
-    public class EmailOpenedEvent : Event<EmailOpenedEvent>
+    public class EmailOpenedEvent : Event<EmailOpenedPayload>
     {
-        public EmailOpenedEvent(EmailOpenedEvent payload, Guid accountId) 
+        public EmailOpenedEvent(EmailOpenedPayload payload, Guid accountId) 
             : base(EventType.EmailOpened, payload, accountId)
         {
         }
