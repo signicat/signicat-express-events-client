@@ -126,12 +126,16 @@ namespace Idfy.Events.Entities
         [Description("When the email failed to be delivered to the recipient")]
         EmailFailed = 30,
         
+        [EnumMember(Value = "email_opened")]
+        [Description("When the recipient has opened the email")]
+        EmailOpened = 31,
+        
         [EnumMember(Value = "sms_delivered")]
         [Description("When the sms was successfully delivered to the recipient")]
-        SmsDelivered = 31,
+        SmsDelivered = 32,
         
         [EnumMember(Value = "sms_failed")]
         [Description("When the sms failed to be delivered to the recipient")]
-        SmsFailed = 32
+        SmsFailed = 33
     }
 }
