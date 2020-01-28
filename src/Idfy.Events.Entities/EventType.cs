@@ -136,6 +136,10 @@ namespace Idfy.Events.Entities
         
         [EnumMember(Value = "sms_failed")]
         [Description("When the sms failed to be delivered to the recipient")]
-        SmsFailed = 33
+        SmsFailed = 33,
+        
+        [EnumMember(Value = "person_monitor_changes")]
+        [Description("When new changes are added to the monitor.")]
+        PersonMonitorChanges = 34
     }
 }
