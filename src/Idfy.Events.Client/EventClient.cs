@@ -26,29 +26,13 @@ namespace Idfy.Events.Client
         private readonly string _clientId;
         private readonly string _clientSecret;
         private readonly string _tokenUrl;
+        private readonly string _accountId;
 
         private IBus _bus;
         private Action<RebusLoggingConfigurer> _rebusLoggingConfigurer;
         private bool _noRebusLogger;
         
 
-        /// <summary>
-        /// Sets up the event client to subscribe to events that occurs on the provided account.
-        /// </summary>
-        /// <param name="oauthClientId">Your OAuth client ID</param>
-        /// <param name="oauthClientSecret">Your OAuth client secret</param>
-        /// <returns><see cref="EventClient"/></returns>
-        public static EventClient Setup(string oauthClientId, string oauthClientSecret)
-        {
-            if (string.IsNullOrWhiteSpace(oauthClientId))
-                throw new ArgumentNullException(nameof(oauthClientId));
-            
-            if (string.IsNullOrWhiteSpace(oauthClientSecret))
-                throw new ArgumentNullException(nameof(oauthClientSecret));
-            
-            var adapter = new BuiltinHandlerActivator();
-            return new EventClient(adapter, oauthClientId, oauthClientSecret);
-        }
 
         /// <summary>
         /// Sets up the event client to subscribe to events that occurs on the provided account.
@@ -56,8 +40,9 @@ namespace Idfy.Events.Client
         /// <param name="oauthClientId">Your OAuth client ID</param>
         /// <param name="oauthClientSecret">Your OAuth client secret</param>
         /// <param name="oauthServerUrl">The url to the oauth2 server (only for dev testing)</param>
+        /// <param name="accountId">For certain clients the AccountID must be explicitly specified</param>
         /// <returns><see cref="EventClient"/></returns>
-        public static EventClient Setup(string oauthClientId, string oauthClientSecret, string oauthServerUrl)
+        public static EventClient Setup(string oauthClientId, string oauthClientSecret, string oauthServerUrl = null, string accountId = null)
         {
             if (string.IsNullOrWhiteSpace(oauthClientId))
                 throw new ArgumentNullException(nameof(oauthClientId));
@@ -65,11 +50,12 @@ namespace Idfy.Events.Client
             if (string.IsNullOrWhiteSpace(oauthClientSecret))
                 throw new ArgumentNullException(nameof(oauthClientSecret));
 
-            if (string.IsNullOrWhiteSpace(oauthServerUrl))
-                throw new ArgumentNullException(nameof(oauthServerUrl));
-            
+            var tokenUrl = string.IsNullOrEmpty(oauthServerUrl)
+                ? null
+                : $"{oauthServerUrl.EnsureEndsWithSlash()}connect/token";
+
             var adapter = new BuiltinHandlerActivator();
-            return new EventClient(adapter, oauthClientId, oauthClientSecret, $"{oauthServerUrl.EnsureEndsWithSlash()}connect/token");
+            return new EventClient(adapter, oauthClientId, oauthClientSecret, tokenUrl, accountId);
         }
 
         /// <summary>
@@ -108,8 +94,8 @@ namespace Idfy.Events.Client
             _rebusLoggingConfigurer = config;
             _noRebusLogger = config == null;
         }
-        
-        private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret, string tokenUrl=null)
+
+        private EventClient(BuiltinHandlerActivator adapter, string clientId, string clientSecret, string tokenUrl = null, string accountId = null)
         {
             _adapter = adapter;
             _adapter.Handle<object>(InternalHandler);
@@ -118,6 +104,7 @@ namespace Idfy.Events.Client
             _clientId = clientId;
             _clientSecret = WebUtility.UrlEncode(clientSecret);
             _tokenUrl = tokenUrl;
+            _accountId = accountId;
         }
 
         
@@ -173,12 +160,19 @@ namespace Idfy.Events.Client
             // Get event configuration
             var eventConfigUrl = $"{Urls.NotificationEndpoint}/client";
 
-            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString($"{eventConfigUrl}?v2=true", tokenResponse.AccessToken));
+            var queryString = "?v2=true";
+
+            if (!string.IsNullOrEmpty(_accountId))
+            {
+                queryString += $"&accountId={WebUtility.UrlEncode(_accountId)}";
+            }
+
+            var eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.GetString($"{eventConfigUrl}{queryString}", tokenResponse.AccessToken));
 
             if (string.IsNullOrWhiteSpace(eventConfigResponse.ConnectionString))
             {
                 // first-time setup of client is required
-                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup?v2=true", token: tokenResponse.AccessToken));
+                eventConfigResponse = Mapper<EventClientConfiguration>.MapFromJson(Requestor.PostString($"{eventConfigUrl}/setup{queryString}", token: tokenResponse.AccessToken));
             }
 
             return eventConfigResponse;
