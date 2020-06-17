@@ -140,6 +140,10 @@ namespace Idfy.Events.Entities
         
         [EnumMember(Value = "person_monitor_changes")]
         [Description("When new changes are added to the monitor.")]
-        PersonMonitorChanges = 34
+        PersonMonitorChanges = 34,
+        
+        [EnumMember(Value = "self_declaration_assignment_deleted")]
+        [Description("When a self declaration assignment is deleted.")]
+        SelfDeclarationAssignmentDeleted = 35,
     }
 }
